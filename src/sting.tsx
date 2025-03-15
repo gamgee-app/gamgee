@@ -8,7 +8,7 @@ const times = [5, 15, 30, 35];
 export const StingComponent: FC = () => {
     const [timeIndex, setTimeIndex] = useState<number>(0);
     const [backgroundActivated, setBackgroundActivated] = useState<boolean>(false);
-    let {totalSeconds, hours, minutes, seconds, pause, start, isRunning} = useStopwatch({autoStart: true});
+    let {totalSeconds, hours, minutes, seconds, pause, start, reset, isRunning} = useStopwatch({autoStart: true});
 
       const toggleSting = useCallback(() => {
         if (!backgroundActivated) {
@@ -34,7 +34,8 @@ export const StingComponent: FC = () => {
       }, [totalSeconds, setTimeIndex, timeIndex]);
 
       const resetTimer = useCallback(() => {
-      }, [totalSeconds, hours, minutes, seconds, pause, start, isRunning]);
+        reset(undefined, isRunning);
+      }, [isRunning, totalSeconds, reset]);
 
     return (
     <div className={styles.stingAppContainer}>
