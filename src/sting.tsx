@@ -11,6 +11,7 @@ import { Dayjs } from "dayjs";
 export const StingComponent: FC = () => {
     const [backgroundActivated, setBackgroundActivated] = useState<boolean>(false);
     const [seekTimerInput, setSeekTimerInput] = useState<Dayjs | null>();
+    const [sceneEndTime, setSceneEndTime] = useState<string | null>(null);
 
     let {totalSeconds, hours, minutes, seconds, pause, start, reset, isRunning} = useStopwatch({autoStart: true});
 
@@ -23,12 +24,8 @@ export const StingComponent: FC = () => {
         return differencesDict;
       }, []);
 
-      const toggleSting = useCallback(() => {
-        if (!backgroundActivated) {
-          setBackgroundActivated(true);
-          return;
-        }
-        setBackgroundActivated(false);
+      const toggleSting = useCallback((shouldActivate: boolean) => {
+        setBackgroundActivated(shouldActivate);
       }, [backgroundActivated, setBackgroundActivated]);
 
       const toggleTimeRunningState = useCallback(() => {
@@ -42,12 +39,18 @@ export const StingComponent: FC = () => {
       useEffect(() => {
         const key = hours + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0')
         if (differencesDictionary.has(key)) {
-          toggleSting();
+          toggleSting(true);
+          setSceneEndTime(differencesDictionary.get(key).end_time.substring(0, 7));
+          return;
         }
-      }, [hours, minutes, seconds, differencesDictionary]);
+        if (key === sceneEndTime) {
+          toggleSting(false);
+        }
+      }, [hours, minutes, seconds, differencesDictionary,setSceneEndTime, sceneEndTime]);
 
       const resetTimer = useCallback(() => {
         reset(undefined, isRunning);
+        toggleSting(false);
       }, [isRunning, totalSeconds, reset]);
 
       const seekTimer = useCallback(() => {
@@ -70,7 +73,6 @@ export const StingComponent: FC = () => {
         <span>{hours}:{minutes}.{seconds}</span>
       </div>
       <div>
-        <button onClick={() => toggleSting()}>Test</button>
         <button onClick={() => {toggleTimeRunningState()}}>{isRunning ? "Pause" : "Play"}</button>
         <button onClick={() => {resetTimer()}}>Reset</button>
       </div>
