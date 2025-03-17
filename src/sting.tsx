@@ -1,6 +1,7 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import styles from './sting.module.css'
 import differencesList from './res/two_towers_extended_differences.json' with {type: "json"};
+import chaptersList from './res/two_towers_extended_chapters.json' with {type: "json"};
 import { useStopwatch } from "react-timer-hook";
 import classNames from "classnames";
 import { TimeField } from '@mui/x-date-pickers/TimeField';
@@ -12,11 +13,12 @@ export const StingComponent: FC = () => {
     const [backgroundActivated, setBackgroundActivated] = useState<boolean>(false);
     const [seekTimerInput, setSeekTimerInput] = useState<Dayjs | null>();
     const [sceneEndTime, setSceneEndTime] = useState<string | null>(null);
+    const [chapterInfo, setChapterInfo] = useState<string | undefined>(undefined)
 
     let {totalSeconds, hours, minutes, seconds, pause, start, reset, isRunning} = useStopwatch({autoStart: true});
 
       const differencesDictionary = useMemo(() => {
-        const differencesDict = new Map();
+        const differencesDict = new Map<string, any>();
         differencesList.forEach(item => {
           const trimmedTimestamp = item.start_time.substring(0, 7);
           differencesDict.set(trimmedTimestamp, item);
@@ -24,29 +26,31 @@ export const StingComponent: FC = () => {
         return differencesDict;
       }, []);
 
-      const toggleSting = useCallback((shouldActivate: boolean) => {
-        setBackgroundActivated(shouldActivate);
-      }, [backgroundActivated, setBackgroundActivated]);
-
-      const toggleTimeRunningState = useCallback(() => {
-        if (isRunning) {
-          pause();
-          return;
-        }
-        start();
-      }, [pause, start, isRunning])
+      const chaptersByTimestamp = useMemo(() => {
+        const chaptersByTimestampDictionary = new Map<string, string>();
+        chaptersList.forEach(item => {
+          const trimmedTimestamp = item.start_time.substring(1, 8);
+          chaptersByTimestampDictionary.set(trimmedTimestamp, item.title);
+        });
+        return chaptersByTimestampDictionary;
+      }, [])
 
       useEffect(() => {
         const key = hours + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0')
+        if(key === "0:04:08") {
+          console.log("Woo!");
+        }
         if (differencesDictionary.has(key)) {
           toggleSting(true);
           setSceneEndTime(differencesDictionary.get(key).end_time.substring(0, 7));
-          return;
         }
         if (key === sceneEndTime) {
           toggleSting(false);
         }
-      }, [hours, minutes, seconds, differencesDictionary,setSceneEndTime, sceneEndTime]);
+        if (chaptersByTimestamp.has(key)) {
+          setChapterInfo(chaptersByTimestamp.get(key))
+        }
+      }, [hours, minutes, seconds, differencesDictionary, chaptersByTimestamp, sceneEndTime]);
 
       const resetTimer = useCallback(() => {
         reset(undefined, isRunning);
@@ -62,6 +66,18 @@ export const StingComponent: FC = () => {
         const timeToSeekTo = new Date(Date.now() + totalSeconds * 1000);
         reset(timeToSeekTo, isRunning)
       }, [isRunning, seekTimerInput])
+
+      const toggleTimeRunningState = useCallback(() => {
+        if (isRunning) {
+          pause();
+          return;
+        }
+        start();
+      }, [pause, start, isRunning]);
+
+      const toggleSting = useCallback((shouldActivate: boolean) => {
+        setBackgroundActivated(shouldActivate);
+      }, [backgroundActivated, setBackgroundActivated]);
 
     return (
     <div className={styles.stingAppContainer}>
@@ -82,5 +98,8 @@ export const StingComponent: FC = () => {
       </LocalizationProvider>
         <button onClick={() => {seekTimer()}}>Seek</button>
       </div>
+      <div>{
+          chapterInfo && (<span>{chapterInfo}</span>)
+        }</div>
     </div>)
 }
