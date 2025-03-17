@@ -12,7 +12,7 @@ import { Dayjs } from "dayjs";
 export const StingComponent: FC = () => {
     const [backgroundActivated, setBackgroundActivated] = useState<boolean>(false);
     const [seekTimerInput, setSeekTimerInput] = useState<Dayjs | null>();
-    const [sceneEndTime, setSceneEndTime] = useState<string | null>(null);
+    const [sceneEndTime, setSceneEndTime] = useState<string | undefined>(undefined);
     const [chapterInfo, setChapterInfo] = useState<string | undefined>(undefined)
 
     let {totalSeconds, hours, minutes, seconds, pause, start, reset, isRunning} = useStopwatch({autoStart: true});
@@ -45,6 +45,7 @@ export const StingComponent: FC = () => {
           setSceneEndTime(differencesDictionary.get(key).end_time.substring(0, 7));
         }
         if (key === sceneEndTime) {
+          setSceneEndTime(undefined);
           toggleSting(false);
         }
         if (chaptersByTimestamp.has(key)) {
@@ -81,6 +82,9 @@ export const StingComponent: FC = () => {
 
     return (
     <div className={styles.stingAppContainer}>
+      <div className={styles.chapterSelection}>{
+          chapterInfo && (<span>{chapterInfo}</span>)}
+      </div>
       <div className={styles.stingContainer}>
         <div className={styles.stingSword}></div>
         <div className={backgroundActivated ? classNames(styles.stingGlow, styles.stingGlowUp) : classNames(styles.stingGlow, styles.stingGlowDown)}></div>  
@@ -98,8 +102,5 @@ export const StingComponent: FC = () => {
       </LocalizationProvider>
         <button onClick={() => {seekTimer()}}>Seek</button>
       </div>
-      <div>{
-          chapterInfo && (<span>{chapterInfo}</span>)
-        }</div>
     </div>)
 }
