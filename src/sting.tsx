@@ -37,6 +37,11 @@ export const StingComponent: FC = () => {
         reset(undefined, isRunning);
       }, [isRunning, totalSeconds, reset]);
 
+      const seekTimer = useCallback(() => {
+        const timeToSeekTo = new Date(Date.now() + 30000);
+        reset(timeToSeekTo, isRunning)
+      }, [isRunning])
+
     return (
     <div className={styles.stingAppContainer}>
       <div className={styles.stingContainer}>
@@ -50,6 +55,7 @@ export const StingComponent: FC = () => {
         <button onClick={() => toggleSting()}>Test</button>
         <button onClick={() => {toggleTimeRunningState()}}>{isRunning ? "Pause" : "Play"}</button>
         <button onClick={() => {resetTimer()}}>Reset</button>
+        <button onClick={() => {seekTimer()}}>Seek</button>
       </div>
     </div>)
 }
