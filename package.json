@@ -19,7 +19,8 @@
     "dayjs": "^1.11.13",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-timer-hook": "^3.0.8"
+    "react-timer-hook": "^3.0.8",
+    "usehooks-ts": "^3.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
