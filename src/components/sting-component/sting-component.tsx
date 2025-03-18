@@ -10,7 +10,7 @@ import { Dayjs } from "dayjs";
 import { StingSword } from "../sting-sword/sting-sword";
 
 export const StingComponent: FC = () => {
-    const [backgroundActivated, setBackgroundActivated] = useState<boolean>(false);
+    const [swordIsGlowing, setSwordIsGlowing] = useState<boolean>(false);
     const [seekTimerInput, setSeekTimerInput] = useState<Dayjs | null>();
     const [sceneEndTime, setSceneEndTime] = useState<string | undefined>(undefined);
     const [chapterInfo, setChapterInfo] = useState<string | undefined>(undefined)
@@ -74,15 +74,15 @@ export const StingComponent: FC = () => {
       }, [pause, start, isRunning]);
 
       const toggleSting = useCallback((shouldActivate: boolean) => {
-        setBackgroundActivated(shouldActivate);
-      }, [backgroundActivated, setBackgroundActivated]);
+        setSwordIsGlowing(shouldActivate);
+      }, [swordIsGlowing, setSwordIsGlowing]);
 
     return (
     <div className={styles.stingAppContainer}>
       <div className={styles.chapterSelection}>{
           chapterInfo && (<span>{chapterInfo}</span>)}
       </div>
-        <StingSword backgroundActivated={backgroundActivated} />
+        <StingSword swordIsGlowing={swordIsGlowing} />
       <div>
         <span>{hours}:{minutes}.{seconds}</span>
       </div>
