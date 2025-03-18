@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import styles from './sting.module.css'
-import differencesList from './res/two_towers_extended_differences.json' with {type: "json"};
-import chaptersList from './res/two_towers_extended_chapters.json' with {type: "json"};
+import differencesList from '../../res/two_towers_extended_differences.json' with {type: "json"};
+import chaptersList from '../../res/two_towers_extended_chapters.json' with {type: "json"};
 import { useStopwatch } from "react-timer-hook";
 import classNames from "classnames";
 import { TimeField } from '@mui/x-date-pickers/TimeField';
