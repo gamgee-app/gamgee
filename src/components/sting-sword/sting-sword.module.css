@@ -1,0 +1,57 @@
+.stingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1000px;
+  width: 100%;
+}
+
+.stingSword {
+  position: absolute;
+  width: 1000px;
+  height: 1000px;
+  background-image: url("/src/assets/Sting.svg");
+  background-size: 1000px 1000px;
+}
+
+.stingGlow {
+  display: none;
+  position: absolute;
+  width: 1000px;
+  height: 1000px;
+  background-image: url("/src/assets/Sting-blue.svg");
+  background-repeat: no-repeat;
+  background-size: 1000px 1000px;
+}
+
+.stingGlowUp {
+  display: flex;
+  animation-name: sting-glow-up;
+  animation-duration: 2s;
+}
+
+@keyframes sting-glow-up {
+  0% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+
+.stingGlowDown {
+  display: none;
+  animation-name: sting-glow-down;
+  animation-duration: 2s;
+}
+
+@keyframes sting-glow-down {
+  0% {
+    opacity: 100%;
+    display: flex;
+  }
+  100% {
+    opacity: 0%;
+    display: none;
+  }
+}

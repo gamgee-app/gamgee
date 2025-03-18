@@ -1,16 +1,16 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import styles from './sting.module.css'
-import differencesList from './res/two_towers_extended_differences.json' with {type: "json"};
-import chaptersList from './res/two_towers_extended_chapters.json' with {type: "json"};
+import styles from './sting-component.module.css'
+import differencesList from '../../res/two_towers_extended_differences.json' with {type: "json"};
+import chaptersList from '../../res/two_towers_extended_chapters.json' with {type: "json"};
 import { useStopwatch } from "react-timer-hook";
-import classNames from "classnames";
 import { TimeField } from '@mui/x-date-pickers/TimeField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from "dayjs";
+import { StingSword } from "../sting-sword/sting-sword";
 
 export const StingComponent: FC = () => {
-    const [backgroundActivated, setBackgroundActivated] = useState<boolean>(false);
+    const [swordIsGlowing, setSwordIsGlowing] = useState<boolean>(false);
     const [seekTimerInput, setSeekTimerInput] = useState<Dayjs | null>();
     const [sceneEndTime, setSceneEndTime] = useState<string | undefined>(undefined);
     const [chapterInfo, setChapterInfo] = useState<string | undefined>(undefined)
@@ -37,9 +37,6 @@ export const StingComponent: FC = () => {
 
       useEffect(() => {
         const key = hours + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0')
-        if(key === "0:04:08") {
-          console.log("Woo!");
-        }
         if (differencesDictionary.has(key)) {
           toggleSting(true);
           setSceneEndTime(differencesDictionary.get(key).end_time.substring(0, 7));
@@ -77,18 +74,15 @@ export const StingComponent: FC = () => {
       }, [pause, start, isRunning]);
 
       const toggleSting = useCallback((shouldActivate: boolean) => {
-        setBackgroundActivated(shouldActivate);
-      }, [backgroundActivated, setBackgroundActivated]);
+        setSwordIsGlowing(shouldActivate);
+      }, [swordIsGlowing, setSwordIsGlowing]);
 
     return (
     <div className={styles.stingAppContainer}>
       <div className={styles.chapterSelection}>{
           chapterInfo && (<span>{chapterInfo}</span>)}
       </div>
-      <div className={styles.stingContainer}>
-        <div className={styles.stingSword}></div>
-        <div className={backgroundActivated ? classNames(styles.stingGlow, styles.stingGlowUp) : classNames(styles.stingGlow, styles.stingGlowDown)}></div>  
-      </div>
+        <StingSword swordIsGlowing={swordIsGlowing} />
       <div>
         <span>{hours}:{minutes}.{seconds}</span>
       </div>
