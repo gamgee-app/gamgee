@@ -37,9 +37,6 @@ export const StingComponent: FC = () => {
 
       useEffect(() => {
         const key = hours + ":" + String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0')
-        if(key === "0:04:08") {
-          console.log("Woo!");
-        }
         if (differencesDictionary.has(key)) {
           toggleSting(true);
           setSceneEndTime(differencesDictionary.get(key).end_time.substring(0, 7));
