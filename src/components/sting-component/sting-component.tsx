@@ -3,11 +3,11 @@ import styles from './sting.module.css'
 import differencesList from '../../res/two_towers_extended_differences.json' with {type: "json"};
 import chaptersList from '../../res/two_towers_extended_chapters.json' with {type: "json"};
 import { useStopwatch } from "react-timer-hook";
-import classNames from "classnames";
 import { TimeField } from '@mui/x-date-pickers/TimeField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { Dayjs } from "dayjs";
+import { StingSword } from "../sting-sword/sting-sword";
 
 export const StingComponent: FC = () => {
     const [backgroundActivated, setBackgroundActivated] = useState<boolean>(false);
@@ -82,10 +82,7 @@ export const StingComponent: FC = () => {
       <div className={styles.chapterSelection}>{
           chapterInfo && (<span>{chapterInfo}</span>)}
       </div>
-      <div className={styles.stingContainer}>
-        <div className={styles.stingSword}></div>
-        <div className={backgroundActivated ? classNames(styles.stingGlow, styles.stingGlowUp) : classNames(styles.stingGlow, styles.stingGlowDown)}></div>  
-      </div>
+        <StingSword backgroundActivated={backgroundActivated} />
       <div>
         <span>{hours}:{minutes}.{seconds}</span>
       </div>
