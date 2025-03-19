@@ -30,6 +30,7 @@ export const usePlex = (plexIp: string, plexToken: string) => {
 
   const viewOffset = session?.viewOffset;
   const playerState = session?.player?.state;
+  const mediaDuration = session?.duration;
 
   const [lastPlayerState, setLastPlayerState] = useState<string>("unknown");
   const [lastViewOffset, setLastViewOffset] = useState<number>(0);
@@ -65,6 +66,7 @@ export const usePlex = (plexIp: string, plexToken: string) => {
     imdbId,
     estimatedPlayTime,
     playerState,
+    mediaDuration,
     error: sessionError ?? metadataError,
   };
 };
