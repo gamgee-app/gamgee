@@ -1,7 +1,37 @@
 import differencesTheTwoTowers from "./tt0167261/extended/differences.json" with { type: "json" };
 import chaptersTheTwoTowers from "./tt0167261/extended/chapters.json" with { type: "json" };
 
-export const movies = {
+type EditionDifferenceData = {
+  start_time: string;
+  end_time: string;
+  type: string;
+};
+
+type EditionDifference = {
+  label: string;
+  data: EditionDifferenceData[];
+};
+
+type EditionChapter = {
+  start_time: string;
+  title: string;
+};
+
+type MovieEdition = {
+  label: string;
+  duration: number;
+  chapters?: EditionChapter[];
+  differences?: EditionDifference[];
+};
+
+type Movie = {
+  title: string;
+  editions: MovieEdition[];
+};
+
+type Movies = { [key: string]: Movie };
+
+export const movies: Movies = {
   tt0120737: {
     title: "The Lord of the Rings: The Fellowship of the Ring",
     editions: [
