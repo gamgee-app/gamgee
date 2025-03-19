@@ -33,12 +33,8 @@ export const StingComponent: FC = () => {
     (edition) => edition.label === "Extended Edition",
   )!;
 
-  const movieEditionDifference = movieEdition.differences!.find(
-    (difference) => difference.label === "Theatrical Edition",
-  )!;
-
   const chaptersList = movieEdition.chapters!;
-  const differencesList = movieEditionDifference.data;
+  const differencesList = movieEdition.differences!;
 
   const differencesDictionary = useMemo(() => {
     const differencesDict = new Map<string, any>();

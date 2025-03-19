@@ -7,11 +7,6 @@ type EditionDifferenceData = {
   type: string;
 };
 
-type EditionDifference = {
-  label: string;
-  data: EditionDifferenceData[];
-};
-
 type EditionChapter = {
   start_time: string;
   title: string;
@@ -21,7 +16,7 @@ type MovieEdition = {
   label: string;
   duration: number;
   chapters?: EditionChapter[]; // TODO make required field once we have all the data
-  differences?: EditionDifference[]; // TODO make required field once we have all the data
+  differences?: EditionDifferenceData[]; // TODO make required field once we have all the data
 };
 
 type Movie = {
@@ -56,9 +51,7 @@ export const movies: Movies = {
         label: "Extended Edition",
         duration: 14125166,
         chapters: chaptersTheTwoTowers,
-        differences: [
-          { label: "Theatrical Edition", data: differencesTheTwoTowers },
-        ],
+        differences: differencesTheTwoTowers,
       },
     ],
   },
