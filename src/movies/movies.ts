@@ -20,8 +20,8 @@ type EditionChapter = {
 type MovieEdition = {
   label: string;
   duration: number;
-  chapters?: EditionChapter[];
-  differences?: EditionDifference[];
+  chapters?: EditionChapter[]; // TODO make required field once we have all the data
+  differences?: EditionDifference[]; // TODO make required field once we have all the data
 };
 
 type Movie = {
