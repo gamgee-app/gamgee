@@ -8,6 +8,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
 import { StingSword } from "../sting-sword/sting-sword";
+import {usePlex} from "./plex/usePlex.ts";
+import {TextField} from "@mui/material";
 
 export const StingComponent: FC = () => {
   const [swordIsGlowing, setSwordIsGlowing] = useState<boolean>(false);
@@ -106,6 +108,14 @@ export const StingComponent: FC = () => {
     [swordIsGlowing, setSwordIsGlowing],
   );
 
+  const [plexIp, setPlexIp] = useState("");
+  const [plexToken, setPlexToken] = useState("");
+  const { estimatedPlayTime, imdbId, playerState } = usePlex(plexIp, plexToken);
+
+  // Use imdbId to identify the movie playing, see movies.ts
+  // Use playerState to automatically pause/play our stopwatch
+  // Use estimatedPlayTime to keep our stopwatch in sync.
+
   return (
     <div className={styles.stingAppContainer}>
       <div className={styles.chapterSelection}>
@@ -148,6 +158,8 @@ export const StingComponent: FC = () => {
           Seek
         </button>
       </div>
+      <TextField label="Plex IP" onChange={(newIpEvent) => setPlexIp(newIpEvent.target.value)} />
+      <TextField label="Plex Token" onChange={(newTokenEvent) => setPlexToken(newTokenEvent.target.value)} />
     </div>
   );
 };
