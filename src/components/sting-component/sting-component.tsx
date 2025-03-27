@@ -1,12 +1,10 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./sting-component.module.css";
-import differencesList from "../../res/two_towers_extended_differences_ms.json" with { type: "json" };
-import chaptersList from "../../res/two_towers_extended_chapters_ms.json" with { type: "json" };
-import { Dayjs } from "dayjs";
 import { StingSword } from "../sting-sword/sting-sword";
 import { TextField } from "@mui/material";
 import { usePlex } from "../../hooks/plex/usePlex.ts";
 import { useTimer, Timer } from "react-use-precision-timer";
+import { movies } from "../../movies/movies.ts";
 
 export const StingComponent: FC = () => {
   const [swordIsGlowing, setSwordIsGlowing] = useState<boolean>(false);
@@ -19,6 +17,13 @@ export const StingComponent: FC = () => {
     const elapsed = timer.getElapsedRunningTime();
     setElapsedTime(elapsed);
   }, []);
+
+  const movieEdition = movies["tt0167261"].editions.find(
+    (edition) => edition.label === "Extended Edition",
+  )!;
+
+  const chaptersList = movieEdition.chapters!;
+  const differencesList = movieEdition.differences!;
 
   const timer: Timer = useTimer({ delay: 1000 / 24 }, msStopwatchTest);
 
