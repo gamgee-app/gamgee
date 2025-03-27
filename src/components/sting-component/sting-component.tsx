@@ -46,7 +46,10 @@ export const StingComponent: FC = () => {
 
   const [plexIp, setPlexIp] = useState("");
   const [plexToken, setPlexToken] = useState("");
-  usePlex(plexIp, plexToken);
+  const { imdbId, estimatedPlayTime, playerState, error } = usePlex(
+    plexIp,
+    plexToken,
+  );
 
   // Use imdbId to identify the movie playing, see movies.ts
   // Use playerState to automatically pause/play our stopwatch
