@@ -14,7 +14,7 @@ export const StingSword: FC<StingSwordProps> = ({ swordIsGlowing }) => {
         className={
           swordIsGlowing
             ? classNames(styles.stingGlow, styles.stingGlowUp)
-            : classNames(styles.stingGlow, styles.stingGlowDown)
+            : classNames(styles.stingGlow)
         }
       ></div>
     </div>

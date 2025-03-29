@@ -18,6 +18,14 @@ export const StingComponent: FC = () => {
     setElapsedTime(elapsed);
   }, []);
 
+  const [plexIp, setPlexIp] = useState("");
+  const [plexToken, setPlexToken] = useState("");
+  /*  
+  const { imdbId, estimatedPlayTime, playerState, error } = usePlex(
+    plexIp,
+    plexToken,
+  );
+*/
   const movieEdition = movies["tt0167261"].editions.find(
     (edition) => edition.label === "Extended Edition",
   )!;
@@ -48,13 +56,6 @@ export const StingComponent: FC = () => {
   );
   const chapter = chaptersList[nextChapterIndex - 1];
   const chapterInfo = chapter.title;
-
-  const [plexIp, setPlexIp] = useState("");
-  const [plexToken, setPlexToken] = useState("");
-  const { imdbId, estimatedPlayTime, playerState, error } = usePlex(
-    plexIp,
-    plexToken,
-  );
 
   // Use imdbId to identify the movie playing, see movies.ts
   // Use playerState to automatically pause/play our stopwatch
