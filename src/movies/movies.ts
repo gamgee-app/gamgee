@@ -3,12 +3,15 @@ import chaptersTheTwoTowers from "./tt0167261/extended/chapters.json" with { typ
 
 type EditionDifferenceData = {
   start_time: string;
+  start_time_ms: number;
   end_time: string;
+  end_time_ms: number;
   type: string;
 };
 
 type EditionChapter = {
   start_time: string;
+  start_time_ms: number;
   title: string;
 };
 
