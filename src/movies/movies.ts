@@ -1,7 +1,7 @@
 import differencesTheTwoTowers from "./tt0167261/extended/differences.json" with { type: "json" };
 import chaptersTheTwoTowers from "./tt0167261/extended/chapters.json" with { type: "json" };
 
-type EditionDifferenceData = {
+export type EditionDifferenceData = {
   start_time: string;
   start_time_ms: number;
   end_time: string;
@@ -9,25 +9,25 @@ type EditionDifferenceData = {
   type: string;
 };
 
-type EditionChapter = {
+export type EditionChapter = {
   start_time: string;
   start_time_ms: number;
   title: string;
 };
 
-type MovieEdition = {
+export type MovieEdition = {
   label: string;
   duration: number;
   chapters?: EditionChapter[]; // TODO make required field once we have all the data
   differences?: EditionDifferenceData[]; // TODO make required field once we have all the data
 };
 
-type Movie = {
+export type Movie = {
   title: string;
   editions: MovieEdition[];
 };
 
-type Movies = { [key: string]: Movie };
+export type Movies = { [key: string]: Movie };
 
 export const movies: Movies = {
   tt0120737: {
