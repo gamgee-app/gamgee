@@ -1,9 +1,8 @@
 import { Movie, MovieEdition } from "../../movies/movies.ts";
-import { Timer } from "react-use-precision-timer";
 
 export type TimeProviderProps = {
-  timer: Timer;
   toggleTimerState: () => void;
+  toggleTimerLabel: string;
   resetTimer: () => void;
   seekTimer: (milliseconds: number) => void;
 };

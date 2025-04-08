@@ -18,6 +18,7 @@ export const ManualMetadataProvider = ({
   editionMetadata,
   setEditionMetadata,
   toggleTimerState,
+  toggleTimerLabel,
   resetTimer,
   seekTimer,
 }: ManualMetadataProviderProps) => {
@@ -30,6 +31,7 @@ export const ManualMetadataProvider = ({
       <ManualTimeProvider
         timer={timer}
         toggleTimerState={toggleTimerState}
+        toggleTimerLabel={toggleTimerLabel}
         resetTimer={resetTimer}
         seekTimer={seekTimer}
         disabled={!editionMetadata}
@@ -110,8 +112,8 @@ export const ManualEditionMetadataProvider = ({
 export type ManualTimeProviderProps = TimeProviderProps & { disabled: boolean };
 
 export const ManualTimeProvider = ({
-  timer,
   toggleTimerState,
+  toggleTimerLabel,
   resetTimer,
   seekTimer,
   disabled,
@@ -123,7 +125,7 @@ export const ManualTimeProvider = ({
   return (
     <div className={styles.timeProvider}>
       <button disabled={disabled} onClick={toggleTimerState}>
-        {!timer.isStarted() ? "Start" : timer.isRunning() ? "Pause" : "Resume"}
+        {toggleTimerLabel}
       </button>
       <button disabled={disabled} onClick={resetTimer}>
         Reset

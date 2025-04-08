@@ -22,6 +22,12 @@ export const useMediaTimer = () => {
     }
   };
 
+  const toggleTimerLabel = !timer.isStarted()
+    ? "Start"
+    : timer.isRunning()
+      ? "Pause"
+      : "Resume";
+
   const resetTimer = () => {
     if (timer.isRunning()) {
       timer.start();
@@ -41,5 +47,11 @@ export const useMediaTimer = () => {
     }
   };
 
-  return { timer, timestamp, toggleTimerState, resetTimer, seekTimer };
+  return {
+    timestamp,
+    toggleTimerState,
+    toggleTimerLabel,
+    resetTimer,
+    seekTimer,
+  };
 };
