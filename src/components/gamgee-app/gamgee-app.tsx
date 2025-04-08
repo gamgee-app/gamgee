@@ -1,5 +1,5 @@
 import { StingComponent } from "../sting-component/sting-component.tsx";
-import { useCallback, useId, useState } from "react";
+import { useId, useState } from "react";
 import {
   FormControl,
   InputLabel,
@@ -12,8 +12,8 @@ import {
   EditionMetadata,
   MetadataProviderProps,
 } from "../metadata-provider/metadata-provider.ts";
-import { useTimer } from "react-use-precision-timer";
 import styles from "./gamgee-app.module.css";
+import { useMediaTimer } from "../../hooks/media-timer/useMediaTimer.tsx";
 
 const metadataProviders = ["Manual"] as const;
 type MetadataProvider = (typeof metadataProviders)[number];
@@ -22,14 +22,7 @@ export const GamgeeApp = () => {
   const [metadataProvider, setMetadataProvider] =
     useState<MetadataProvider>("Manual");
   const [metadata, setMetadata] = useState<EditionMetadata | null>(null);
-  const [timestamp, setTimestamp] = useState<number>(0);
-
-  const updateElapsedTime = useCallback(() => {
-    const elapsed = timer.getElapsedRunningTime();
-    setTimestamp(elapsed);
-  }, []);
-
-  const timer = useTimer({ delay: 1000 / 24 }, updateElapsedTime);
+  const { timer, timestamp } = useMediaTimer();
 
   const providerLabelId = useId();
   const providerLabel = "Metadata Provider";
