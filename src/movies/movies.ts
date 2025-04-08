@@ -24,14 +24,14 @@ export type MovieEdition = {
 
 export type Movie = {
   title: string;
+  imdbId: string;
   editions: MovieEdition[];
 };
 
-export type Movies = { [key: string]: Movie };
-
-export const movies: Movies = {
-  tt0120737: {
+export const movies = [
+  {
     title: "The Lord of the Rings: The Fellowship of the Ring",
+    imdbId: "tt0120737",
     editions: [
       {
         label: "Theatrical Edition",
@@ -43,8 +43,9 @@ export const movies: Movies = {
       },
     ],
   },
-  tt0167261: {
+  {
     title: "The Lord of the Rings: The Two Towers",
+    imdbId: "tt0167261",
     editions: [
       {
         label: "Theatrical Edition",
@@ -58,8 +59,9 @@ export const movies: Movies = {
       },
     ],
   },
-  tt0167260: {
+  {
     title: "The Lord of the Rings: The Return of the King",
+    imdbId: "tt0167260",
     editions: [
       {
         label: "Theatrical Edition",
@@ -71,4 +73,7 @@ export const movies: Movies = {
       },
     ],
   },
-};
+] as const satisfies Movie[];
+
+export type ImdbId = (typeof movies)[number]["imdbId"];
+export const imdbIds = movies.map((movie) => movie.imdbId);

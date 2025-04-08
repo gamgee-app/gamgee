@@ -1,36 +1,83 @@
 import { StingComponent } from "../sting-component/sting-component.tsx";
-import { useState } from "react";
-import { usePlex } from "../../hooks/plex/usePlex.ts";
-import { TextField } from "@mui/material";
-import { movies } from "../../movies/movies.ts";
+import { useCallback, useId, useState } from "react";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
+import { ManualMetadataProvider } from "../manual-metadata-provider/manual-metadata-provider.tsx";
+import {
+  EditionMetadata,
+  MetadataProviderProps,
+} from "../metadata-provider/metadata-provider.ts";
+import { useTimer } from "react-use-precision-timer";
+import styles from "./gamgee-app.module.css";
+
+const metadataProviders = ["Manual"] as const;
+type MetadataProvider = (typeof metadataProviders)[number];
 
 export const GamgeeApp = () => {
-  const movieEdition = movies["tt0167261"].editions.find(
-    (edition) => edition.label === "Extended Edition",
-  )!;
+  const [metadataProvider, setMetadataProvider] =
+    useState<MetadataProvider>("Manual");
+  const [metadata, setMetadata] = useState<EditionMetadata | null>(null);
+  const [timestamp, setTimestamp] = useState<number>(0);
 
-  const [plexIp, setPlexIp] = useState("");
-  const [plexToken, setPlexToken] = useState("");
-  usePlex(plexIp, plexToken);
+  const updateElapsedTime = useCallback(() => {
+    const elapsed = timer.getElapsedRunningTime();
+    setTimestamp(elapsed);
+  }, []);
 
-  // Use imdbId to identify the movie playing, see movies.ts
-  // Use playerState to automatically pause/play our stopwatch
-  // Use estimatedPlayTime to keep our stopwatch in sync.
+  const timer = useTimer({ delay: 1000 / 24 }, updateElapsedTime);
+
+  const providerLabelId = useId();
+  const providerLabel = "Metadata Provider";
+
+  const handleMetadataProviderChange = (
+    event: SelectChangeEvent<MetadataProvider>,
+  ) => {
+    setMetadataProvider(event.target.value as MetadataProvider);
+    setMetadata(null);
+  };
+
+  const metadataProviderProps: MetadataProviderProps = {
+    timer,
+    editionMetadata: metadata,
+    setEditionMetadata: setMetadata,
+  };
 
   return (
-    <>
-      <StingComponent
-        differences={movieEdition.differences!}
-        chapters={movieEdition.chapters!}
-      />
-      <TextField
-        label="Plex IP"
-        onChange={(newIpEvent) => setPlexIp(newIpEvent.target.value)}
-      />
-      <TextField
-        label="Plex Token"
-        onChange={(newTokenEvent) => setPlexToken(newTokenEvent.target.value)}
-      />
-    </>
+    <div className={styles.appContainerOuter}>
+      <div className={styles.appContainerInner}>
+        {metadata &&
+          metadata.edition.differences &&
+          metadata.edition.chapters && (
+            <StingComponent
+              differences={metadata.edition.differences}
+              chapters={metadata.edition.chapters}
+              timestamp={timestamp}
+            />
+          )}
+        <FormControl className={styles.providerContainer}>
+          <InputLabel id={providerLabelId}>{providerLabel}</InputLabel>
+          <Select
+            value={metadataProvider}
+            labelId={providerLabelId}
+            label={providerLabel}
+            onChange={handleMetadataProviderChange}
+          >
+            {metadataProviders.map((provider) => (
+              <MenuItem key={provider} value={provider}>
+                {provider}
+              </MenuItem>
+            ))}
+          </Select>
+          {metadataProvider === "Manual" && (
+            <ManualMetadataProvider {...metadataProviderProps} />
+          )}
+        </FormControl>
+      </div>
+    </div>
   );
 };

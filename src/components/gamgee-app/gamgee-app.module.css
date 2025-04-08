@@ -1,0 +1,18 @@
+.appContainerOuter {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.appContainerInner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+}
+
+.providerContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
