@@ -19,6 +19,7 @@ export const ManualMetadataProvider = ({
   setEditionMetadata,
   toggleTimerState,
   resetTimer,
+  seekTimer,
 }: ManualMetadataProviderProps) => {
   return (
     <>
@@ -30,6 +31,7 @@ export const ManualMetadataProvider = ({
         timer={timer}
         toggleTimerState={toggleTimerState}
         resetTimer={resetTimer}
+        seekTimer={seekTimer}
         disabled={!editionMetadata}
       />
     </>
@@ -111,6 +113,7 @@ export const ManualTimeProvider = ({
   timer,
   toggleTimerState,
   resetTimer,
+  seekTimer,
   disabled,
 }: ManualTimeProviderProps) => {
   const [seekTimerValue, setSeekTimerValue] = useState<Dayjs>(
@@ -138,17 +141,7 @@ export const ManualTimeProvider = ({
       <button
         disabled={disabled || !seekTimerValue || !seekTimerValue.isValid()}
         onClick={() => {
-          if (seekTimerValue) {
-            const currentEpochMillis = dayjsUtc().valueOf();
-            const selectedMillis = seekTimerValue.valueOf();
-            const startTime = currentEpochMillis - selectedMillis;
-            if (timer.isRunning()) {
-              timer.start(startTime);
-            } else {
-              timer.start(startTime);
-              timer.pause();
-            }
-          }
+          if (seekTimerValue) seekTimer(seekTimerValue.valueOf());
         }}
       >
         Seek

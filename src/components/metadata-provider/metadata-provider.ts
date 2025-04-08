@@ -5,6 +5,7 @@ export type TimeProviderProps = {
   timer: Timer;
   toggleTimerState: () => void;
   resetTimer: () => void;
+  seekTimer: (milliseconds: number) => void;
 };
 
 export type EditionMetadata = {

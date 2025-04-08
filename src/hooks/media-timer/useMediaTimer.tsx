@@ -1,5 +1,6 @@
 import { useTimer } from "react-use-precision-timer";
 import { useCallback, useState } from "react";
+import dayjsUtc from "../../utils/dayjs-config.ts";
 
 export const useMediaTimer = () => {
   const [timestamp, setTimestamp] = useState<number>(0);
@@ -29,5 +30,16 @@ export const useMediaTimer = () => {
     }
   };
 
-  return { timer, timestamp, toggleTimerState, resetTimer };
+  const seekTimer = (milliseconds: number) => {
+    const currentEpochMillis = dayjsUtc().valueOf();
+    const startTime = currentEpochMillis - milliseconds;
+    if (timer.isRunning()) {
+      timer.start(startTime);
+    } else {
+      timer.start(startTime);
+      timer.pause();
+    }
+  };
+
+  return { timer, timestamp, toggleTimerState, resetTimer, seekTimer };
 };
