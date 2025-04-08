@@ -14,13 +14,10 @@ import styles from "./manual-metadata-provider.module.css";
 export type ManualMetadataProviderProps = MetadataProviderProps;
 
 export const ManualMetadataProvider = ({
-  timer,
   editionMetadata,
   setEditionMetadata,
-  toggleTimerState,
-  toggleTimerLabel,
-  resetTimer,
-  seekTimer,
+  mediaTimerProperties,
+  mediaTimerActions,
 }: ManualMetadataProviderProps) => {
   return (
     <>
@@ -29,11 +26,8 @@ export const ManualMetadataProvider = ({
         setEditionMetadata={setEditionMetadata}
       />
       <ManualTimeProvider
-        timer={timer}
-        toggleTimerState={toggleTimerState}
-        toggleTimerLabel={toggleTimerLabel}
-        resetTimer={resetTimer}
-        seekTimer={seekTimer}
+        mediaTimerProperties={mediaTimerProperties}
+        mediaTimerActions={mediaTimerActions}
         disabled={!editionMetadata}
       />
     </>
@@ -112,22 +106,23 @@ export const ManualEditionMetadataProvider = ({
 export type ManualTimeProviderProps = TimeProviderProps & { disabled: boolean };
 
 export const ManualTimeProvider = ({
-  toggleTimerState,
-  toggleTimerLabel,
-  resetTimer,
-  seekTimer,
+  mediaTimerProperties,
+  mediaTimerActions,
   disabled,
 }: ManualTimeProviderProps) => {
   const [seekTimerValue, setSeekTimerValue] = useState<Dayjs>(
     dayjsUtc("1970-01-01"),
   );
 
+  const { toggleLabel } = mediaTimerProperties;
+  const { reset, seek, toggle } = mediaTimerActions;
+
   return (
     <div className={styles.timeProvider}>
-      <button disabled={disabled} onClick={toggleTimerState}>
-        {toggleTimerLabel}
+      <button disabled={disabled} onClick={toggle}>
+        {toggleLabel}
       </button>
-      <button disabled={disabled} onClick={resetTimer}>
+      <button disabled={disabled} onClick={reset}>
         Reset
       </button>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -143,7 +138,7 @@ export const ManualTimeProvider = ({
       <button
         disabled={disabled || !seekTimerValue || !seekTimerValue.isValid()}
         onClick={() => {
-          if (seekTimerValue) seekTimer(seekTimerValue.valueOf());
+          if (seekTimerValue) seek(seekTimerValue.valueOf());
         }}
       >
         Seek

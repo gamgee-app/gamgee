@@ -1,10 +1,12 @@
 import { Movie, MovieEdition } from "../../movies/movies.ts";
+import {
+  MediaTimerActions,
+  MediaTimerProperties,
+} from "../../hooks/media-timer/useMediaTimer.tsx";
 
 export type TimeProviderProps = {
-  toggleTimerState: () => void;
-  toggleTimerLabel: string;
-  resetTimer: () => void;
-  seekTimer: (milliseconds: number) => void;
+  mediaTimerProperties: MediaTimerProperties;
+  mediaTimerActions: MediaTimerActions;
 };
 
 export type EditionMetadata = {

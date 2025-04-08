@@ -22,13 +22,7 @@ export const GamgeeApp = () => {
   const [metadataProvider, setMetadataProvider] =
     useState<MetadataProvider>("Manual");
   const [metadata, setMetadata] = useState<EditionMetadata | null>(null);
-  const {
-    timestamp,
-    toggleTimerState,
-    toggleTimerLabel,
-    resetTimer,
-    seekTimer,
-  } = useMediaTimer();
+  const { mediaTimerProperties, mediaTimerActions } = useMediaTimer();
 
   const providerLabelId = useId();
   const providerLabel = "Metadata Provider";
@@ -43,10 +37,8 @@ export const GamgeeApp = () => {
   const metadataProviderProps: MetadataProviderProps = {
     editionMetadata: metadata,
     setEditionMetadata: setMetadata,
-    toggleTimerState,
-    toggleTimerLabel,
-    resetTimer,
-    seekTimer,
+    mediaTimerProperties,
+    mediaTimerActions,
   };
 
   return (
@@ -58,7 +50,7 @@ export const GamgeeApp = () => {
             <StingComponent
               differences={metadata.edition.differences}
               chapters={metadata.edition.chapters}
-              timestamp={timestamp}
+              timestamp={mediaTimerProperties.timestamp}
             />
           )}
         <FormControl className={styles.providerContainer}>

@@ -2,7 +2,23 @@ import { useTimer } from "react-use-precision-timer";
 import { useCallback, useState } from "react";
 import dayjsUtc from "../../utils/dayjs-config.ts";
 
-export const useMediaTimer = () => {
+export interface MediaTimerProperties {
+  timestamp: number;
+  toggleLabel: string;
+}
+
+export interface MediaTimerActions {
+  toggle: () => void;
+  reset: () => void;
+  seek: (milliseconds: number) => void;
+}
+
+interface UseMediaTimerProps {
+  mediaTimerProperties: MediaTimerProperties;
+  mediaTimerActions: MediaTimerActions;
+}
+
+export const useMediaTimer = (): UseMediaTimerProps => {
   const [timestamp, setTimestamp] = useState<number>(0);
 
   const updateElapsedTime = useCallback(() => {
@@ -12,7 +28,7 @@ export const useMediaTimer = () => {
 
   const timer = useTimer({ delay: 1000 / 24 }, updateElapsedTime);
 
-  const toggleTimerState = () => {
+  const toggle = () => {
     if (!timer.isStarted()) {
       timer.start();
     } else if (timer.isRunning()) {
@@ -22,13 +38,13 @@ export const useMediaTimer = () => {
     }
   };
 
-  const toggleTimerLabel = !timer.isStarted()
+  const toggleLabel = !timer.isStarted()
     ? "Start"
     : timer.isRunning()
       ? "Pause"
       : "Resume";
 
-  const resetTimer = () => {
+  const reset = () => {
     if (timer.isRunning()) {
       timer.start();
     } else {
@@ -36,7 +52,7 @@ export const useMediaTimer = () => {
     }
   };
 
-  const seekTimer = (milliseconds: number) => {
+  const seek = (milliseconds: number) => {
     const currentEpochMillis = dayjsUtc().valueOf();
     const startTime = currentEpochMillis - milliseconds;
     if (timer.isRunning()) {
@@ -48,10 +64,14 @@ export const useMediaTimer = () => {
   };
 
   return {
-    timestamp,
-    toggleTimerState,
-    toggleTimerLabel,
-    resetTimer,
-    seekTimer,
+    mediaTimerProperties: {
+      timestamp,
+      toggleLabel,
+    },
+    mediaTimerActions: {
+      toggle,
+      reset,
+      seek,
+    },
   };
 };
