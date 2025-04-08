@@ -2,13 +2,19 @@ import { usePlexSession } from "./usePlexSession.ts";
 import { usePlexMetadata } from "./usePlexMetadata.ts";
 import { useEffect, useMemo, useState } from "react";
 import { PlexAPI } from "@lukehagar/plexjs";
+import { ServerProtocol } from "@lukehagar/plexjs/src/lib/config.ts";
 
-export const usePlex = (plexIp: string, plexToken: string) => {
+export const usePlex = (
+  plexIp: string,
+  plexToken: string,
+  protocol: ServerProtocol,
+) => {
   const plexApi = useMemo(() => {
     if (plexIp && plexToken) {
       return new PlexAPI({
         ip: plexIp,
         accessToken: plexToken,
+        protocol: protocol,
       });
     }
   }, [plexIp, plexToken]);

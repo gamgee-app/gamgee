@@ -8,6 +8,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { ManualMetadataProvider } from "../manual-metadata-provider/manual-metadata-provider.tsx";
+import { PlexMetadataProvider } from "../plex-metadata-provider/plex-metadata-provider.tsx";
 import {
   EditionMetadata,
   MetadataProviderProps,
@@ -15,7 +16,7 @@ import {
 import styles from "./gamgee-app.module.css";
 import { useMediaTimer } from "../../hooks/media-timer/useMediaTimer.tsx";
 
-const metadataProviders = ["Manual"] as const;
+const metadataProviders = ["Manual", "Plex"] as const;
 type MetadataProvider = (typeof metadataProviders)[number];
 
 export const GamgeeApp = () => {
@@ -69,6 +70,9 @@ export const GamgeeApp = () => {
           </Select>
           {metadataProvider === "Manual" && (
             <ManualMetadataProvider {...metadataProviderProps} />
+          )}
+          {metadataProvider === "Plex" && (
+            <PlexMetadataProvider {...metadataProviderProps} />
           )}
         </FormControl>
       </div>

@@ -9,7 +9,7 @@ export const usePlexSession = (
 ) => {
   const [sessionsResponse, setSessionsResponse] =
     useState<GetSessionsResponse | null>(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<any>(null);
 
   useInterval(() => {
     let isMounted = true;

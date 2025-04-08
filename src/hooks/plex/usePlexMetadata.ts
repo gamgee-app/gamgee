@@ -8,7 +8,7 @@ export const usePlexMetadata = (
 ) => {
   const [metadataResponse, setMetadataResponse] =
     useState<GetMediaMetaDataResponse | null>(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<any>(null);
 
   useEffect(() => {
     let isMounted = true;
