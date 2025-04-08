@@ -28,11 +28,23 @@ export const useMediaTimer = (fps: number): UseMediaTimerProps => {
 
   const timer = useTimer({ delay: 1000 / fps }, updateElapsedTime);
 
+  const pause = () => {
+    // callback is not called in useTimer when timer is not running
+    timer.pause();
+    updateElapsedTime();
+  };
+
+  const stop = () => {
+    // callback is not called in useTimer when timer is not running
+    timer.stop();
+    updateElapsedTime();
+  };
+
   const toggle = () => {
     if (!timer.isStarted()) {
       timer.start();
     } else if (timer.isRunning()) {
-      timer.pause();
+      pause();
     } else {
       timer.resume();
     }
@@ -48,7 +60,7 @@ export const useMediaTimer = (fps: number): UseMediaTimerProps => {
     if (timer.isRunning()) {
       timer.start();
     } else {
-      timer.stop();
+      stop();
     }
   };
 
@@ -59,7 +71,7 @@ export const useMediaTimer = (fps: number): UseMediaTimerProps => {
       timer.start(startTime);
     } else {
       timer.start(startTime);
-      timer.pause();
+      pause();
     }
   };
 
