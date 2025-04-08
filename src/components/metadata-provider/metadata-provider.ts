@@ -3,6 +3,7 @@ import { Timer } from "react-use-precision-timer";
 
 export type TimeProviderProps = {
   timer: Timer;
+  toggleTimerState: () => void;
 };
 
 export type EditionMetadata = {

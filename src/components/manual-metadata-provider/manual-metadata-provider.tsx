@@ -17,6 +17,7 @@ export const ManualMetadataProvider = ({
   timer,
   editionMetadata,
   setEditionMetadata,
+  toggleTimerState,
 }: ManualMetadataProviderProps) => {
   return (
     <>
@@ -24,7 +25,11 @@ export const ManualMetadataProvider = ({
         editionMetadata={editionMetadata}
         setEditionMetadata={setEditionMetadata}
       />
-      <ManualTimeProvider timer={timer} disabled={!editionMetadata} />
+      <ManualTimeProvider
+        timer={timer}
+        toggleTimerState={toggleTimerState}
+        disabled={!editionMetadata}
+      />
     </>
   );
 };
@@ -102,6 +107,7 @@ export type ManualTimeProviderProps = TimeProviderProps & { disabled: boolean };
 
 export const ManualTimeProvider = ({
   timer,
+  toggleTimerState,
   disabled,
 }: ManualTimeProviderProps) => {
   const [seekTimerValue, setSeekTimerValue] = useState<Dayjs>(
@@ -110,18 +116,7 @@ export const ManualTimeProvider = ({
 
   return (
     <div className={styles.timeProvider}>
-      <button
-        disabled={disabled}
-        onClick={() => {
-          if (!timer.isStarted()) {
-            timer.start();
-          } else if (timer.isRunning()) {
-            timer.pause();
-          } else {
-            timer.resume();
-          }
-        }}
-      >
+      <button disabled={disabled} onClick={toggleTimerState}>
         {!timer.isStarted() ? "Start" : timer.isRunning() ? "Pause" : "Resume"}
       </button>
       <button

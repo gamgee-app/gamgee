@@ -22,7 +22,7 @@ export const GamgeeApp = () => {
   const [metadataProvider, setMetadataProvider] =
     useState<MetadataProvider>("Manual");
   const [metadata, setMetadata] = useState<EditionMetadata | null>(null);
-  const { timer, timestamp } = useMediaTimer();
+  const { timer, timestamp, toggleTimerState } = useMediaTimer();
 
   const providerLabelId = useId();
   const providerLabel = "Metadata Provider";
@@ -38,6 +38,7 @@ export const GamgeeApp = () => {
     timer,
     editionMetadata: metadata,
     setEditionMetadata: setMetadata,
+    toggleTimerState,
   };
 
   return (

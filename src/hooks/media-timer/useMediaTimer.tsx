@@ -11,5 +11,15 @@ export const useMediaTimer = () => {
 
   const timer = useTimer({ delay: 1000 / 24 }, updateElapsedTime);
 
-  return { timer, timestamp };
+  const toggleTimerState = () => {
+    if (!timer.isStarted()) {
+      timer.start();
+    } else if (timer.isRunning()) {
+      timer.pause();
+    } else {
+      timer.resume();
+    }
+  };
+
+  return { timer, timestamp, toggleTimerState };
 };
