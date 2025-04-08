@@ -18,7 +18,7 @@ interface UseMediaTimerProps {
   mediaTimerActions: MediaTimerActions;
 }
 
-export const useMediaTimer = (): UseMediaTimerProps => {
+export const useMediaTimer = (fps: number): UseMediaTimerProps => {
   const [timestamp, setTimestamp] = useState<number>(0);
 
   const updateElapsedTime = useCallback(() => {
@@ -26,7 +26,7 @@ export const useMediaTimer = (): UseMediaTimerProps => {
     setTimestamp(elapsed);
   }, []);
 
-  const timer = useTimer({ delay: 1000 / 24 }, updateElapsedTime);
+  const timer = useTimer({ delay: 1000 / fps }, updateElapsedTime);
 
   const toggle = () => {
     if (!timer.isStarted()) {
