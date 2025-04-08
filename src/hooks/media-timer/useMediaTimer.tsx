@@ -21,5 +21,13 @@ export const useMediaTimer = () => {
     }
   };
 
-  return { timer, timestamp, toggleTimerState };
+  const resetTimer = () => {
+    if (timer.isRunning()) {
+      timer.start();
+    } else {
+      timer.stop();
+    }
+  };
+
+  return { timer, timestamp, toggleTimerState, resetTimer };
 };

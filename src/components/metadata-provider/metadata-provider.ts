@@ -4,6 +4,7 @@ import { Timer } from "react-use-precision-timer";
 export type TimeProviderProps = {
   timer: Timer;
   toggleTimerState: () => void;
+  resetTimer: () => void;
 };
 
 export type EditionMetadata = {
