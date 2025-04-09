@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId } from "react";
 import { usePlex } from "../../hooks/plex/usePlex.ts";
 import {
   FormControl,
@@ -19,11 +19,15 @@ export const PlexMetadataProvider = ({
   mediaTimerProperties,
   mediaTimerActions,
 }: PlexMetadataProviderProps) => {
-  const [plexIp, setPlexIp] = useState("");
-  const [plexToken, setPlexToken] = useState("");
-  const [protocol, setProtocol] = useState<ServerProtocol>("http");
-  const { error, estimatedPlayTime, imdbId, mediaDuration, playerState } =
-    usePlex(plexIp, plexToken, protocol);
+  const {
+    error,
+    estimatedPlayTime,
+    imdbId,
+    mediaDuration,
+    playerState,
+    plexApiOptions,
+    setPlexApiOptions,
+  } = usePlex();
 
   const { timestamp } = mediaTimerProperties;
   const { seek } = mediaTimerActions;
@@ -60,11 +64,14 @@ export const PlexMetadataProvider = ({
       <FormControl fullWidth>
         <InputLabel id={protocolLabelId}>{protocolLabel}</InputLabel>
         <Select
-          value={protocol}
+          value={plexApiOptions.protocol}
           id={protocolLabelId}
           label={protocolLabel}
-          onChange={(newProtocol) =>
-            setProtocol(newProtocol.target.value as ServerProtocol)
+          onChange={(newProtocolEvent) =>
+            setPlexApiOptions((options) => ({
+              ...options,
+              protocol: newProtocolEvent.target.value as ServerProtocol,
+            }))
           }
         >
           {Object.values(ServerProtocol).map((protocol) => (
@@ -75,12 +82,24 @@ export const PlexMetadataProvider = ({
         </Select>
       </FormControl>
       <TextField
+        value={plexApiOptions.ip}
         label="Plex IP"
-        onChange={(newIpEvent) => setPlexIp(newIpEvent.target.value)}
+        onChange={(newIpEvent) =>
+          setPlexApiOptions((options) => ({
+            ...options,
+            ip: newIpEvent.target.value,
+          }))
+        }
       />
       <TextField
+        value={plexApiOptions.accessToken}
         label="Plex Token"
-        onChange={(newTokenEvent) => setPlexToken(newTokenEvent.target.value)}
+        onChange={(newTokenEvent) =>
+          setPlexApiOptions((options) => ({
+            ...options,
+            accessToken: newTokenEvent.target.value,
+          }))
+        }
       />
     </>
   );

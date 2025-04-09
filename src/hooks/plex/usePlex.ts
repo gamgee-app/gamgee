@@ -1,15 +1,10 @@
 import { usePlexSession } from "./usePlexSession.ts";
 import { usePlexMetadata } from "./usePlexMetadata.ts";
 import { useEffect, useState } from "react";
-import { ServerProtocol } from "@lukehagar/plexjs/src/lib/config.ts";
 import { usePlexApi } from "./usePlexApi.ts";
 
-export const usePlex = (
-  plexIp: string,
-  plexToken: string,
-  protocol: ServerProtocol,
-) => {
-  const plexApi = usePlexApi(plexIp, plexToken, protocol);
+export const usePlex = () => {
+  const { plexApi, plexApiOptions, setPlexApiOptions } = usePlexApi();
   const { session, error: sessionError } = usePlexSession(plexApi, 200);
 
   const ratingKey = session?.ratingKey
@@ -65,5 +60,7 @@ export const usePlex = (
     playerState,
     mediaDuration,
     error: sessionError ?? metadataError,
+    plexApiOptions,
+    setPlexApiOptions,
   };
 };

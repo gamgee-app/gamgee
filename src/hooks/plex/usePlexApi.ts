@@ -1,19 +1,18 @@
 import { useMemo } from "react";
-import { PlexAPI } from "@lukehagar/plexjs";
-import { ServerProtocol } from "@lukehagar/plexjs/src/lib/config.ts";
+import { PlexAPI, SDKOptions } from "@lukehagar/plexjs";
+import { useLocalStorage } from "usehooks-ts";
 
-export const usePlexApi = (
-  plexIp: string,
-  plexToken: string,
-  protocol: ServerProtocol,
-) => {
-  return useMemo(() => {
-    if (plexIp && plexToken) {
-      return new PlexAPI({
-        ip: plexIp,
-        accessToken: plexToken,
-        protocol: protocol,
-      });
-    }
-  }, [plexIp, plexToken]);
+export const usePlexApi = () => {
+  const [plexApiOptions, setPlexApiOptions] = useLocalStorage<SDKOptions>(
+    "plex-api-options",
+    {},
+  );
+
+  const plexApi = useMemo(() => new PlexAPI(plexApiOptions), [plexApiOptions]);
+
+  return {
+    plexApi,
+    plexApiOptions,
+    setPlexApiOptions,
+  };
 };
