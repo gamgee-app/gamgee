@@ -1,33 +1,36 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./sting-component.module.css";
-import { useStopwatch } from "react-timer-hook";
-import { TimeField } from "@mui/x-date-pickers/TimeField";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Dayjs } from "dayjs";
 import { StingSword } from "../sting-sword/sting-sword";
 import { TextField } from "@mui/material";
 import { usePlex } from "../../hooks/plex/usePlex.ts";
 import { movies } from "../../movies/movies.ts";
+import { useTimer, Timer } from "react-use-precision-timer";
 
 export const StingComponent: FC = () => {
   const [swordIsGlowing, setSwordIsGlowing] = useState<boolean>(false);
-  const [seekTimerInput, setSeekTimerInput] = useState<Dayjs | null>();
-  const [sceneEndTime, setSceneEndTime] = useState<string | undefined>(
-    undefined,
-  );
-  const [chapterInfo, setChapterInfo] = useState<string | undefined>(undefined);
 
-  let {
-    totalSeconds,
-    hours,
-    minutes,
-    seconds,
-    pause,
-    start,
-    reset,
-    isRunning,
-  } = useStopwatch({ autoStart: true });
+  const updateElapsedTime = useCallback(() => {
+    const elapsed = timer.getElapsedRunningTime();
+    setElapsedTime(elapsed);
+  }, []);
+
+  const timer: Timer = useTimer({ delay: 1000 / 24 }, updateElapsedTime);
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
+
+  const getDifference = (time: number) =>
+    differencesList.find(
+      (difference) =>
+        difference.start_time_ms < time && difference.end_time_ms > time,
+    );
+
+  useEffect(() => {
+    const maybeDifference = getDifference(elapsedTime);
+    if (maybeDifference && !swordIsGlowing) {
+      setSwordIsGlowing(true);
+    } else if (!maybeDifference && swordIsGlowing) {
+      setSwordIsGlowing(false);
+    }
+  }, [elapsedTime]);
 
   const movieEdition = movies["tt0167261"].editions.find(
     (edition) => edition.label === "Extended Edition",
@@ -36,83 +39,18 @@ export const StingComponent: FC = () => {
   const chaptersList = movieEdition.chapters!;
   const differencesList = movieEdition.differences!;
 
-  const differencesDictionary = useMemo(() => {
-    const differencesDict = new Map<string, any>();
-    differencesList.forEach((item) => {
-      const trimmedTimestamp = item.start_time.substring(0, 7);
-      differencesDict.set(trimmedTimestamp, item);
-    });
-    return differencesDict;
-  }, []);
-
-  const chaptersByTimestamp = useMemo(() => {
-    const chaptersByTimestampDictionary = new Map<string, string>();
-    chaptersList.forEach((item) => {
-      const trimmedTimestamp = item.start_time.substring(1, 8);
-      chaptersByTimestampDictionary.set(trimmedTimestamp, item.title);
-    });
-    return chaptersByTimestampDictionary;
-  }, []);
-
-  useEffect(() => {
-    const key =
-      hours +
-      ":" +
-      String(minutes).padStart(2, "0") +
-      ":" +
-      String(seconds).padStart(2, "0");
-    if (differencesDictionary.has(key)) {
-      toggleSting(true);
-      setSceneEndTime(differencesDictionary.get(key).end_time.substring(0, 7));
-    }
-    if (key === sceneEndTime) {
-      setSceneEndTime(undefined);
-      toggleSting(false);
-    }
-    if (chaptersByTimestamp.has(key)) {
-      setChapterInfo(chaptersByTimestamp.get(key));
-    }
-  }, [
-    hours,
-    minutes,
-    seconds,
-    differencesDictionary,
-    chaptersByTimestamp,
-    sceneEndTime,
-  ]);
-
-  const resetTimer = useCallback(() => {
-    reset(undefined, isRunning);
-    toggleSting(false);
-  }, [isRunning, totalSeconds, reset]);
-
-  const seekTimer = useCallback(() => {
-    if (seekTimerInput == undefined) {
-      return;
-    }
-    totalSeconds =
-      seekTimerInput.second() +
-      seekTimerInput.minute() * 60 +
-      seekTimerInput.hour() * 60 * 60;
-
-    const timeToSeekTo = new Date(Date.now() + totalSeconds * 1000);
-    reset(timeToSeekTo, isRunning);
-  }, [isRunning, seekTimerInput]);
-
-  const toggleTimeRunningState = useCallback(() => {
-    if (isRunning) {
-      pause();
-      return;
-    }
-    start();
-  }, [pause, start, isRunning]);
-
-  const toggleSting = useCallback(
-    (shouldActivate: boolean) => {
-      setSwordIsGlowing(shouldActivate);
-    },
-    [swordIsGlowing, setSwordIsGlowing],
+  const nextChapterIndex = chaptersList.findIndex(
+    (c) => c.start_time_ms > elapsedTime,
   );
+
+  const chapter = chaptersList[nextChapterIndex - 1];
+  const chapterInfo = chapter.title;
+
+  useEffect(() => timer.start(), []);
+
+  const hours = Math.floor(elapsedTime / (1000 * 60 * 60)) % 24;
+  const minutes = Math.floor(elapsedTime / (1000 * 60)) % 60;
+  const seconds = Math.floor(elapsedTime / 1000) % 60;
 
   const [plexIp, setPlexIp] = useState("");
   const [plexToken, setPlexToken] = useState("");
@@ -132,37 +70,6 @@ export const StingComponent: FC = () => {
         <span>
           {hours}:{minutes}.{seconds}
         </span>
-      </div>
-      <div>
-        <button
-          onClick={() => {
-            toggleTimeRunningState();
-          }}
-        >
-          {isRunning ? "Pause" : "Play"}
-        </button>
-        <button
-          onClick={() => {
-            resetTimer();
-          }}
-        >
-          Reset
-        </button>
-      </div>
-      <div>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <TimeField
-            onChange={(newValue) => setSeekTimerInput(newValue)}
-            format="HH:mm:ss"
-          />
-        </LocalizationProvider>
-        <button
-          onClick={() => {
-            seekTimer();
-          }}
-        >
-          Seek
-        </button>
       </div>
       <TextField
         label="Plex IP"
