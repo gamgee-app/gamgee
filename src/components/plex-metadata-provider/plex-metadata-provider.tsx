@@ -45,6 +45,7 @@ export const PlexMetadataProvider = ({
 
     if (playerState !== "playing") {
       stop();
+      setEditionMetadata(null);
       return;
     }
 

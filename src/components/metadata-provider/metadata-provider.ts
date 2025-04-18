@@ -16,7 +16,7 @@ export type EditionMetadata = {
 
 export type EditionProviderProps = {
   editionMetadata: EditionMetadata | null;
-  setEditionMetadata: (metadata: EditionMetadata) => void;
+  setEditionMetadata: (metadata: EditionMetadata | null) => void;
 };
 
 export type MetadataProviderProps = TimeProviderProps & EditionProviderProps;
