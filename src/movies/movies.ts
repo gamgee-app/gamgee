@@ -1,7 +1,7 @@
 import differencesTheTwoTowers from "./tt0167261/extended/differences.json" with { type: "json" };
 import chaptersTheTwoTowers from "./tt0167261/extended/chapters.json" with { type: "json" };
 
-type EditionDifferenceData = {
+export type EditionDifferenceData = {
   start_time: string;
   start_time_ms: number;
   end_time: string;
@@ -9,29 +9,29 @@ type EditionDifferenceData = {
   type: string;
 };
 
-type EditionChapter = {
+export type EditionChapter = {
   start_time: string;
   start_time_ms: number;
   title: string;
 };
 
-type MovieEdition = {
+export type MovieEdition = {
   label: string;
   duration: number;
   chapters?: EditionChapter[]; // TODO make required field once we have all the data
   differences?: EditionDifferenceData[]; // TODO make required field once we have all the data
 };
 
-type Movie = {
+export type Movie = {
   title: string;
+  imdbId: string;
   editions: MovieEdition[];
 };
 
-type Movies = { [key: string]: Movie };
-
-export const movies: Movies = {
-  tt0120737: {
+export const movies = [
+  {
     title: "The Lord of the Rings: The Fellowship of the Ring",
+    imdbId: "tt0120737",
     editions: [
       {
         label: "Theatrical Edition",
@@ -43,8 +43,9 @@ export const movies: Movies = {
       },
     ],
   },
-  tt0167261: {
+  {
     title: "The Lord of the Rings: The Two Towers",
+    imdbId: "tt0167261",
     editions: [
       {
         label: "Theatrical Edition",
@@ -58,8 +59,9 @@ export const movies: Movies = {
       },
     ],
   },
-  tt0167260: {
+  {
     title: "The Lord of the Rings: The Return of the King",
+    imdbId: "tt0167260",
     editions: [
       {
         label: "Theatrical Edition",
@@ -71,4 +73,7 @@ export const movies: Movies = {
       },
     ],
   },
-};
+] as const satisfies Movie[];
+
+export type ImdbId = (typeof movies)[number]["imdbId"];
+export const imdbIds = movies.map((movie) => movie.imdbId);
