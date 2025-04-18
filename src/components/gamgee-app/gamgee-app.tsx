@@ -58,7 +58,7 @@ export const GamgeeApp = () => {
             />
           )}
         <Alert severity="info">{capitalize(mediaTimerProperties.state)}</Alert>
-        <FormControl className={styles.providerContainer}>
+        <FormControl>
           <InputLabel id={providerLabelId}>{providerLabel}</InputLabel>
           <Select
             value={metadataProvider}
@@ -73,12 +73,14 @@ export const GamgeeApp = () => {
             ))}
           </Select>
         </FormControl>
-        {metadataProvider === "Manual" && (
-          <ManualMetadataProvider {...metadataProviderProps} />
-        )}
-        {metadataProvider === "Plex" && (
-          <PlexMetadataProvider {...metadataProviderProps} />
-        )}
+        <div className={styles.providerContainer}>
+          {metadataProvider === "Manual" && (
+            <ManualMetadataProvider {...metadataProviderProps} />
+          )}
+          {metadataProvider === "Plex" && (
+            <PlexMetadataProvider {...metadataProviderProps} />
+          )}
+        </div>
       </div>
     </div>
   );
