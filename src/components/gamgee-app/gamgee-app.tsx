@@ -35,6 +35,7 @@ export const GamgeeApp = () => {
   ) => {
     setMetadataProvider(event.target.value as MetadataProvider);
     setMetadata(null);
+    mediaTimerActions.stop();
   };
 
   const metadataProviderProps: MetadataProviderProps = {
