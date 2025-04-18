@@ -1,6 +1,6 @@
 import { useEffect, useId } from "react";
-import { usePlex } from "../../hooks/plex/usePlex.ts";
 import {
+  Alert,
   FormControl,
   InputLabel,
   MenuItem,
@@ -8,8 +8,9 @@ import {
   TextField,
 } from "@mui/material";
 import { MetadataProviderProps } from "../metadata-provider/metadata-provider.ts";
-import { movies } from "../../movies/movies.ts";
 import { ServerProtocol } from "@lukehagar/plexjs/src/lib/config.ts";
+import { usePlex } from "../../hooks/plex/usePlex.ts";
+import { movies } from "../../movies/movies.ts";
 
 export type PlexMetadataProviderProps = MetadataProviderProps;
 
@@ -20,17 +21,41 @@ export const PlexMetadataProvider = ({
   mediaTimerActions,
 }: PlexMetadataProviderProps) => {
   const {
-    error,
     estimatedPlayTime,
     imdbId,
     mediaDuration,
     playerState,
     plexApiOptions,
     setPlexApiOptions,
+    plexServerCapabilities,
+    plexServerCapabilitiesError,
   } = usePlex();
 
-  const { timestamp } = mediaTimerProperties;
-  const { seek } = mediaTimerActions;
+  const { timestamp, state: mediaTimerState } = mediaTimerProperties;
+  const { resume, seek, pause, stop } = mediaTimerActions;
+
+  useEffect(() => {
+    // playerState is "playing" | "paused" | "buffering" | "empty"
+
+    if (playerState === "paused" || playerState === "buffering") {
+      seek(estimatedPlayTime);
+      pause();
+      return;
+    }
+
+    if (playerState !== "playing") {
+      stop();
+      return;
+    }
+
+    if (mediaTimerState !== "running") {
+      resume();
+    }
+
+    if (Math.abs(estimatedPlayTime - timestamp) > 500) {
+      seek(estimatedPlayTime);
+    }
+  }, [playerState, estimatedPlayTime]);
 
   useEffect(() => {
     const movie = movies.find((m) => m.imdbId === imdbId);
@@ -44,23 +69,26 @@ export const PlexMetadataProvider = ({
     }
   }, [imdbId, mediaDuration]);
 
-  useEffect(() => {
-    if (
-      playerState === "paused" ||
-      (playerState === "playing" && estimatedPlayTime > timestamp)
-    ) {
-      seek(estimatedPlayTime);
-    }
-  }, [playerState, estimatedPlayTime]);
-
   const protocolLabelId = useId();
   const protocolLabel = "Protocol";
 
   return (
     <>
-      {imdbId}
-      {playerState}
-      {error?.message}
+      {plexServerCapabilities === null ? (
+        <Alert severity="error">
+          {plexServerCapabilitiesError?.message ?? "Unknown error occurred"}
+        </Alert>
+      ) : !editionMetadata ? (
+        <Alert severity="success">
+          {`Connected to ${plexServerCapabilities.object?.mediaContainer?.friendlyName} as ${plexServerCapabilities.object?.mediaContainer?.myPlexUsername}`}
+        </Alert>
+      ) : (
+        <Alert severity="info">
+          {[editionMetadata.movie.title, editionMetadata.edition.label].join(
+            " - ",
+          )}
+        </Alert>
+      )}
       <FormControl fullWidth>
         <InputLabel id={protocolLabelId}>{protocolLabel}</InputLabel>
         <Select
@@ -68,10 +96,10 @@ export const PlexMetadataProvider = ({
           id={protocolLabelId}
           label={protocolLabel}
           onChange={(newProtocolEvent) =>
-            setPlexApiOptions((options) => ({
-              ...options,
+            setPlexApiOptions({
+              ...plexApiOptions,
               protocol: newProtocolEvent.target.value as ServerProtocol,
-            }))
+            })
           }
         >
           {Object.values(ServerProtocol).map((protocol) => (
@@ -85,20 +113,20 @@ export const PlexMetadataProvider = ({
         value={plexApiOptions.ip}
         label="Plex IP"
         onChange={(newIpEvent) =>
-          setPlexApiOptions((options) => ({
-            ...options,
+          setPlexApiOptions({
+            ...plexApiOptions,
             ip: newIpEvent.target.value,
-          }))
+          })
         }
       />
       <TextField
         value={plexApiOptions.accessToken}
         label="Plex Token"
         onChange={(newTokenEvent) =>
-          setPlexApiOptions((options) => ({
-            ...options,
+          setPlexApiOptions({
+            ...plexApiOptions,
             accessToken: newTokenEvent.target.value,
-          }))
+          })
         }
       />
     </>

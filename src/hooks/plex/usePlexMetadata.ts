@@ -3,7 +3,7 @@ import { GetMediaMetaDataResponse } from "@lukehagar/plexjs/sdk/models/operation
 import { PlexAPI } from "@lukehagar/plexjs";
 
 export const usePlexMetadata = (
-  plexApi: PlexAPI | undefined,
+  plexApi: PlexAPI | null,
   ratingKey: number | undefined,
 ) => {
   const [metadataResponse, setMetadataResponse] =

@@ -2,15 +2,21 @@ import { useTimer } from "react-use-precision-timer";
 import { useCallback, useState } from "react";
 import dayjsUtc from "../../utils/dayjs-config.ts";
 
+export type MediaTimerState = "running" | "paused" | "stopped";
+
 export interface MediaTimerProperties {
   timestamp: number;
   toggleLabel: string;
+  state: MediaTimerState;
 }
 
 export interface MediaTimerActions {
   toggle: () => void;
   reset: () => void;
   seek: (milliseconds: number) => void;
+  resume: () => void;
+  pause: () => void;
+  stop: () => void;
 }
 
 interface UseMediaTimerProps {
@@ -75,15 +81,25 @@ export const useMediaTimer = (fps: number): UseMediaTimerProps => {
     }
   };
 
+  const state = timer.isRunning()
+    ? "running"
+    : timer.isPaused()
+      ? "paused"
+      : "stopped";
+
   return {
     mediaTimerProperties: {
       timestamp,
       toggleLabel,
+      state,
     },
     mediaTimerActions: {
       toggle,
       reset,
       seek,
+      resume: timer.resume,
+      pause,
+      stop,
     },
   };
 };

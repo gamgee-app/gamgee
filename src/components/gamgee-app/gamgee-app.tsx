@@ -1,6 +1,8 @@
 import { StingComponent } from "../sting-component/sting-component.tsx";
 import { useId, useState } from "react";
 import {
+  Alert,
+  capitalize,
   FormControl,
   InputLabel,
   MenuItem,
@@ -54,6 +56,7 @@ export const GamgeeApp = () => {
               timestamp={mediaTimerProperties.timestamp}
             />
           )}
+        <Alert severity="info">{capitalize(mediaTimerProperties.state)}</Alert>
         <FormControl className={styles.providerContainer}>
           <InputLabel id={providerLabelId}>{providerLabel}</InputLabel>
           <Select
@@ -68,13 +71,13 @@ export const GamgeeApp = () => {
               </MenuItem>
             ))}
           </Select>
-          {metadataProvider === "Manual" && (
-            <ManualMetadataProvider {...metadataProviderProps} />
-          )}
-          {metadataProvider === "Plex" && (
-            <PlexMetadataProvider {...metadataProviderProps} />
-          )}
         </FormControl>
+        {metadataProvider === "Manual" && (
+          <ManualMetadataProvider {...metadataProviderProps} />
+        )}
+        {metadataProvider === "Plex" && (
+          <PlexMetadataProvider {...metadataProviderProps} />
+        )}
       </div>
     </div>
   );
