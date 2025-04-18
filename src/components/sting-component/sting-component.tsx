@@ -1,10 +1,10 @@
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import styles from "./sting-component.module.css";
 import { StingSword } from "../sting-sword/sting-sword";
 import { TextField } from "@mui/material";
 import { usePlex } from "../../hooks/plex/usePlex.ts";
 import { movies } from "../../movies/movies.ts";
-import { useTimer, Timer } from "react-use-precision-timer";
+import { Timer, useTimer } from "react-use-precision-timer";
 
 export const StingComponent: FC = () => {
   const [swordIsGlowing, setSwordIsGlowing] = useState<boolean>(false);
