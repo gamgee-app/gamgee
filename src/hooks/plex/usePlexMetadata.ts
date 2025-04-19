@@ -29,7 +29,7 @@ export const usePlexMetadata = (
     return () => {
       isMounted = false;
     };
-  }, [ratingKey]);
+  }, [plexApi?.library, ratingKey]);
 
   return {
     metadata: metadataResponse?.object?.mediaContainer?.metadata?.at(0),

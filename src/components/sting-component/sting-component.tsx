@@ -1,36 +1,19 @@
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import styles from "./sting-component.module.css";
 import { StingSword } from "../sting-sword/sting-sword";
 import { TextField } from "@mui/material";
 import { usePlex } from "../../hooks/plex/usePlex.ts";
 import { movies } from "../../movies/movies.ts";
-import { useTimer, Timer } from "react-use-precision-timer";
+import { Timer, useTimer } from "react-use-precision-timer";
 
 export const StingComponent: FC = () => {
   const [swordIsGlowing, setSwordIsGlowing] = useState<boolean>(false);
 
-  const updateElapsedTime = useCallback(() => {
-    const elapsed = timer.getElapsedRunningTime();
-    setElapsedTime(elapsed);
-  }, []);
-
-  const timer: Timer = useTimer({ delay: 1000 / 24 }, updateElapsedTime);
+  const timer: Timer = useTimer(
+    { delay: 1000 / 24, startImmediately: true },
+    () => setElapsedTime(timer.getElapsedRunningTime()),
+  );
   const [elapsedTime, setElapsedTime] = useState<number>(0);
-
-  const getDifference = (time: number) =>
-    differencesList.find(
-      (difference) =>
-        difference.start_time_ms < time && difference.end_time_ms > time,
-    );
-
-  useEffect(() => {
-    const maybeDifference = getDifference(elapsedTime);
-    if (maybeDifference && !swordIsGlowing) {
-      setSwordIsGlowing(true);
-    } else if (!maybeDifference && swordIsGlowing) {
-      setSwordIsGlowing(false);
-    }
-  }, [elapsedTime]);
 
   const movieEdition = movies["tt0167261"].editions.find(
     (edition) => edition.label === "Extended Edition",
@@ -39,14 +22,30 @@ export const StingComponent: FC = () => {
   const chaptersList = movieEdition.chapters!;
   const differencesList = movieEdition.differences!;
 
+  const getDifference = useCallback(
+    (time: number) =>
+      differencesList.find(
+        (difference) =>
+          difference.start_time_ms < time && difference.end_time_ms > time,
+      ),
+    [differencesList],
+  );
+
+  useEffect(() => {
+    const maybeDifference = getDifference(elapsedTime);
+    if (maybeDifference && !swordIsGlowing) {
+      setSwordIsGlowing(true);
+    } else if (!maybeDifference && swordIsGlowing) {
+      setSwordIsGlowing(false);
+    }
+  }, [elapsedTime, getDifference, swordIsGlowing]);
+
   const nextChapterIndex = chaptersList.findIndex(
     (c) => c.start_time_ms > elapsedTime,
   );
 
   const chapter = chaptersList[nextChapterIndex - 1];
   const chapterInfo = chapter.title;
-
-  useEffect(() => timer.start(), []);
 
   const hours = Math.floor(elapsedTime / (1000 * 60 * 60)) % 24;
   const minutes = Math.floor(elapsedTime / (1000 * 60)) % 60;
