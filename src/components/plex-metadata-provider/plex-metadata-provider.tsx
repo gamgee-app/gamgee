@@ -31,11 +31,10 @@ export const PlexMetadataProvider = ({
     plexServerCapabilitiesError,
   } = usePlex();
 
-  const { timestamp, state: mediaTimerState } = mediaTimerProperties;
-  const { resume, seek, pause, stop } = mediaTimerActions;
-
   useEffect(() => {
     // playerState is "playing" | "paused" | "buffering" | "empty"
+    const { timestamp, state: mediaTimerState } = mediaTimerProperties;
+    const { resume, seek, pause, stop } = mediaTimerActions;
 
     if (playerState === "paused" || playerState === "buffering") {
       seek(estimatedPlayTime);
@@ -56,7 +55,13 @@ export const PlexMetadataProvider = ({
     if (Math.abs(estimatedPlayTime - timestamp) > 500) {
       seek(estimatedPlayTime);
     }
-  }, [playerState, estimatedPlayTime]);
+  }, [
+    playerState,
+    estimatedPlayTime,
+    mediaTimerActions,
+    mediaTimerProperties,
+    setEditionMetadata,
+  ]);
 
   useEffect(() => {
     const movie = movies.find((m) => m.imdbId === imdbId);
@@ -68,7 +73,7 @@ export const PlexMetadataProvider = ({
     ) {
       setEditionMetadata({ movie, edition });
     }
-  }, [imdbId, mediaDuration]);
+  }, [imdbId, mediaDuration, editionMetadata, setEditionMetadata]);
 
   const protocolLabelId = useId();
   const protocolLabel = "Protocol";

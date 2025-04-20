@@ -6,7 +6,7 @@ import { useInterval } from "usehooks-ts";
 export const usePlexSession = (plexApi: PlexAPI | null, interval: number) => {
   const [sessionsResponse, setSessionsResponse] =
     useState<GetSessionsResponse | null>(null);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   useInterval(() => {
     let isMounted = true;

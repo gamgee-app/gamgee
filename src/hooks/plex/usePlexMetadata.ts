@@ -8,7 +8,7 @@ export const usePlexMetadata = (
 ) => {
   const [metadataResponse, setMetadataResponse] =
     useState<GetMediaMetaDataResponse | null>(null);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -29,7 +29,7 @@ export const usePlexMetadata = (
     return () => {
       isMounted = false;
     };
-  }, [ratingKey]);
+  }, [plexApi?.library, ratingKey]);
 
   return {
     metadata: metadataResponse?.object?.mediaContainer?.metadata?.at(0),

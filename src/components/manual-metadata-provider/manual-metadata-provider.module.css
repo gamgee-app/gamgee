@@ -1,6 +1,6 @@
 .timeProvider {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  justify-content: space-between;
 }

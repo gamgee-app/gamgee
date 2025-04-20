@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./sting-component.module.css";
 import { StingSword } from "../sting-sword/sting-sword";
 import { EditionChapter, EditionDifferenceData } from "../../movies/movies.ts";
@@ -17,11 +17,14 @@ export const StingComponent = ({
 }: StingComponentProps) => {
   const [swordIsGlowing, setSwordIsGlowing] = useState<boolean>(false);
 
-  const getDifference = (time: number) =>
-    differences.find(
-      (difference) =>
-        difference.start_time_ms < time && difference.end_time_ms > time,
-    );
+  const getDifference = useCallback(
+    (time: number) =>
+      differences.find(
+        (difference) =>
+          difference.start_time_ms < time && difference.end_time_ms > time,
+      ),
+    [differences],
+  );
 
   useEffect(() => {
     const maybeDifference = getDifference(timestamp);
@@ -30,7 +33,7 @@ export const StingComponent = ({
     } else if (!maybeDifference && swordIsGlowing) {
       setSwordIsGlowing(false);
     }
-  }, [timestamp]);
+  }, [getDifference, swordIsGlowing, timestamp]);
 
   const chapter = chapters.findLast((c) => c.start_time_ms <= timestamp);
   const chapterInfo = chapter?.title ?? "Unknown Chapter";

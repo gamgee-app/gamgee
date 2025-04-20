@@ -40,19 +40,14 @@ export const usePlexApi = (): UsePlexApiReturnProps => {
       });
   };
 
-  const setPlexApiOptionsWithTest = (options: SDKOptions) => {
-    setPlexApiOptions(options);
-    setPlexApiWithTest(options);
-  };
-
   useEffect(() => {
     setPlexApiWithTest(plexApiOptions);
-  }, []);
+  }, [plexApiOptions]);
 
   return {
     plexApi,
     plexApiOptions,
-    setPlexApiOptions: setPlexApiOptionsWithTest,
+    setPlexApiOptions,
     plexServerCapabilities,
     plexServerCapabilitiesError,
   };

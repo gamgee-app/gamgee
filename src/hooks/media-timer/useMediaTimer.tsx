@@ -1,5 +1,5 @@
 import { useTimer } from "react-use-precision-timer";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import dayjsUtc from "../../utils/dayjs-config.ts";
 
 export type MediaTimerState = "running" | "paused" | "stopped";
@@ -26,24 +26,20 @@ interface UseMediaTimerProps {
 
 export const useMediaTimer = (fps: number): UseMediaTimerProps => {
   const [timestamp, setTimestamp] = useState<number>(0);
-
-  const updateElapsedTime = useCallback(() => {
-    const elapsed = timer.getElapsedRunningTime();
-    setTimestamp(elapsed);
-  }, []);
-
-  const timer = useTimer({ delay: 1000 / fps }, updateElapsedTime);
+  const timer = useTimer({ delay: 1000 / fps }, () =>
+    setTimestamp(timer.getElapsedRunningTime()),
+  );
 
   const pause = () => {
     // callback is not called in useTimer when timer is not running
     timer.pause();
-    updateElapsedTime();
+    setTimestamp(timer.getElapsedRunningTime());
   };
 
   const stop = () => {
     // callback is not called in useTimer when timer is not running
     timer.stop();
-    updateElapsedTime();
+    setTimestamp(timer.getElapsedRunningTime());
   };
 
   const toggle = () => {
