@@ -28,8 +28,12 @@ export const GamgeeApp = () => {
   const [metadata, setMetadata] = useState<EditionMetadata | null>(null);
   const { mediaTimerProperties, mediaTimerActions } = useMediaTimer(24);
 
-  const [swordOnWebhookUrl, setSwordOnWebhookUrl] = useState<string | undefined>(undefined);
-  const [swordOffWebhookUrl, setSwordOffWebhookUrl] = useState<string | undefined>(undefined);
+  const [swordOnWebhookUrl, setSwordOnWebhookUrl] = useState<
+    string | undefined
+  >(undefined);
+  const [swordOffWebhookUrl, setSwordOffWebhookUrl] = useState<
+    string | undefined
+  >(undefined);
 
   const providerLabelId = useId();
   const providerLabel = "Metadata Provider";
@@ -87,19 +91,20 @@ export const GamgeeApp = () => {
             <PlexMetadataProvider {...metadataProviderProps} />
           )}
           <div className={styles.providerContainer}>
-                  <TextField
-                    value={swordOnWebhookUrl}
-                    label="Sword On Webhook"
-                    onChange={(newUrlEvent) =>
-                      setSwordOnWebhookUrl(newUrlEvent.target.value)
-                    }
-                  />
-                  <TextField
-                    value={swordOffWebhookUrl}
-                    label="Sword Off Webhook"
-                    onChange={(newUrlEvent) => 
-                      setSwordOffWebhookUrl(newUrlEvent.target.value)}
-                  />
+            <TextField
+              value={swordOnWebhookUrl}
+              label="Sword On Webhook"
+              onChange={(newUrlEvent) =>
+                setSwordOnWebhookUrl(newUrlEvent.target.value)
+              }
+            />
+            <TextField
+              value={swordOffWebhookUrl}
+              label="Sword Off Webhook"
+              onChange={(newUrlEvent) =>
+                setSwordOffWebhookUrl(newUrlEvent.target.value)
+              }
+            />
           </div>
         </div>
       </div>
