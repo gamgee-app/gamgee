@@ -18,5 +18,5 @@ export const useCallWebhook = (
     } else {
       callWebhook(swordOffWebhookUrl);
     }
-  }, [swordIsGlowing]);
+  }, [swordIsGlowing, swordOffWebhookUrl, swordOnWebhookUrl]);
 };
