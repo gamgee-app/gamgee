@@ -28,7 +28,8 @@ export const GamgeeApp = () => {
   const [metadata, setMetadata] = useState<EditionMetadata | null>(null);
   const { mediaTimerProperties, mediaTimerActions } = useMediaTimer(24);
 
-  const [homeAssistantIp, setHomeAssistantIp] = useState<string | undefined>(undefined);
+  const [swordOnWebhookUrl, setSwordOnWebhookUrl] = useState<string | undefined>(undefined);
+  const [swordOffWebhookUrl, setSwordOffWebhookUrl] = useState<string | undefined>(undefined);
 
   const providerLabelId = useId();
   const providerLabel = "Metadata Provider";
@@ -58,7 +59,8 @@ export const GamgeeApp = () => {
               differences={metadata.edition.differences}
               chapters={metadata.edition.chapters}
               timestamp={mediaTimerProperties.timestamp}
-              homeAssistantIp={homeAssistantIp}
+              swordOnWebhookUrl={swordOnWebhookUrl}
+              swordOffWebhookUrl={swordOffWebhookUrl}
             />
           )}
         <Alert severity="info">{capitalize(mediaTimerProperties.state)}</Alert>
@@ -86,11 +88,17 @@ export const GamgeeApp = () => {
           )}
           <div className={styles.providerContainer}>
                   <TextField
-                    value={homeAssistantIp}
-                    label="Home Assistant IP"
+                    value={swordOnWebhookUrl}
+                    label="Sword On Webhook"
                     onChange={(newUrlEvent) =>
-                      setHomeAssistantIp(newUrlEvent.target.value)
+                      setSwordOnWebhookUrl(newUrlEvent.target.value)
                     }
+                  />
+                  <TextField
+                    value={swordOffWebhookUrl}
+                    label="Sword Off Webhook"
+                    onChange={(newUrlEvent) => 
+                      setSwordOffWebhookUrl(newUrlEvent.target.value)}
                   />
           </div>
         </div>
