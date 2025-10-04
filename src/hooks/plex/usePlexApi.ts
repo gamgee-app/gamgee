@@ -49,9 +49,9 @@ export const usePlexApi = (): UsePlexApiReturnProps => {
     () => {
       setPlexApiWithTest(plexApiOptions);
     },
-    [
-      // causes infinite renders when plexApiOptions is included in the dependency array
-    ],
+    // causes infinite renders when plexApiOptions is included in the dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   return {
