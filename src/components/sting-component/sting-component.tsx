@@ -3,6 +3,7 @@ import styles from "./sting-component.module.css";
 import { StingSword } from "../sting-sword/sting-sword";
 import { EditionChapter, EditionDifferenceData } from "../../movies/movies.ts";
 import dayjsUtc from "../../utils/dayjs-config.ts";
+import { HomeAssistantSword } from "../homeassistant-sword/homeassistant-sword.tsx";
 
 interface StingComponentProps {
   differences: EditionDifferenceData[];
@@ -44,6 +45,7 @@ export const StingComponent = ({
         {chapterInfo && <span>{chapterInfo}</span>}
       </div>
       <StingSword swordIsGlowing={swordIsGlowing} />
+      <HomeAssistantSword swordIsGlowing={swordIsGlowing} />
       <div>
         <span>{dayjsUtc(timestamp).format("HH:mm:ss")}</span>
       </div>
