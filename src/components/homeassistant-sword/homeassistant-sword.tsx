@@ -2,17 +2,21 @@ import { FC, useEffect } from "react";
 
 interface HomeAssistantSwordProps {
     swordIsGlowing: boolean;
+    homeAssistantIp: string | undefined;
 }
 
-export const HomeAssistantSword : FC<HomeAssistantSwordProps> = ({swordIsGlowing}) => {
+export const HomeAssistantSword : FC<HomeAssistantSwordProps> = ({swordIsGlowing, homeAssistantIp}) => {
+
+    const homeAssistantApiLink = `http://${homeAssistantIp}:8123/api/webhook`;
+
     useEffect(() => {
         if (swordIsGlowing) {
-            fetch('http://192.168.1.140:8123/api/webhook/sword_on', 
+            fetch(`${homeAssistantApiLink}/sword_on`, 
                 {method: 'POST'}
             );
         }
-        else{
-            fetch('http://192.168.1.140:8123/api/webhook/sword_off', 
+        else {
+            fetch(`${homeAssistantApiLink}/sword_off`, 
                 {method: 'POST'}
             );
         }

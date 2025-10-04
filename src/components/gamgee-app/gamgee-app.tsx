@@ -8,6 +8,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  TextField,
 } from "@mui/material";
 import { ManualMetadataProvider } from "../manual-metadata-provider/manual-metadata-provider.tsx";
 import { PlexMetadataProvider } from "../plex-metadata-provider/plex-metadata-provider.tsx";
@@ -26,6 +27,8 @@ export const GamgeeApp = () => {
     useState<MetadataProvider>("Manual");
   const [metadata, setMetadata] = useState<EditionMetadata | null>(null);
   const { mediaTimerProperties, mediaTimerActions } = useMediaTimer(24);
+
+  const [homeAssistantIp, setHomeAssistantIp] = useState<string | undefined>(undefined);
 
   const providerLabelId = useId();
   const providerLabel = "Metadata Provider";
@@ -55,6 +58,7 @@ export const GamgeeApp = () => {
               differences={metadata.edition.differences}
               chapters={metadata.edition.chapters}
               timestamp={mediaTimerProperties.timestamp}
+              homeAssistantIp={homeAssistantIp}
             />
           )}
         <Alert severity="info">{capitalize(mediaTimerProperties.state)}</Alert>
@@ -80,6 +84,15 @@ export const GamgeeApp = () => {
           {metadataProvider === "Plex" && (
             <PlexMetadataProvider {...metadataProviderProps} />
           )}
+          <div className={styles.providerContainer}>
+                  <TextField
+                    value={homeAssistantIp}
+                    label="Home Assistant IP"
+                    onChange={(newUrlEvent) =>
+                      setHomeAssistantIp(newUrlEvent.target.value)
+                    }
+                  />
+          </div>
         </div>
       </div>
     </div>

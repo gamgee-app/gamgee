@@ -9,12 +9,14 @@ interface StingComponentProps {
   differences: EditionDifferenceData[];
   chapters: EditionChapter[];
   timestamp: number;
+  homeAssistantIp: string | undefined;
 }
 
 export const StingComponent = ({
   differences,
   chapters,
   timestamp,
+  homeAssistantIp,
 }: StingComponentProps) => {
   const [swordIsGlowing, setSwordIsGlowing] = useState<boolean>(false);
 
@@ -45,7 +47,7 @@ export const StingComponent = ({
         {chapterInfo && <span>{chapterInfo}</span>}
       </div>
       <StingSword swordIsGlowing={swordIsGlowing} />
-      <HomeAssistantSword swordIsGlowing={swordIsGlowing} />
+      <HomeAssistantSword swordIsGlowing={swordIsGlowing} homeAssistantIp={homeAssistantIp} />
       <div>
         <span>{dayjsUtc(timestamp).format("HH:mm:ss")}</span>
       </div>
