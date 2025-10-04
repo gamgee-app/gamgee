@@ -9,12 +9,12 @@ export const HomeAssistantSword : FC<HomeAssistantSwordProps> = ({swordIsGlowing
 
     useEffect(() => {
         if (swordIsGlowing) {
-            xhr.open('POST', 'https://192.168.1.140:8123/api/webhook/sword_on');
+            xhr.open('POST', 'http://192.168.1.140:8123/api/webhook/sword_on');
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.send();
         }
         else{
-            xhr.open('POST', 'https://192.168.1.140:8123/api/webhook/sword_off');
+            xhr.open('POST', 'http://192.168.1.140:8123/api/webhook/sword_off');
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.send();
         }
