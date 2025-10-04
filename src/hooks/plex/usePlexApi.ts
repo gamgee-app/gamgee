@@ -40,14 +40,24 @@ export const usePlexApi = (): UsePlexApiReturnProps => {
       });
   };
 
-  useEffect(() => {
-    setPlexApiWithTest(plexApiOptions);
-  }, [plexApiOptions]);
+  const setPlexApiOptionsWithTest = (options: SDKOptions) => {
+    setPlexApiOptions(options);
+    setPlexApiWithTest(options);
+  };
+
+  useEffect(
+    () => {
+      setPlexApiWithTest(plexApiOptions);
+    },
+    [
+      // causes infinite renders when plexApiOptions is included in the dependency array
+    ],
+  );
 
   return {
     plexApi,
     plexApiOptions,
-    setPlexApiOptions,
+    setPlexApiOptions: setPlexApiOptionsWithTest,
     plexServerCapabilities,
     plexServerCapabilitiesError,
   };
