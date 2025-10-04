@@ -1,7 +1,9 @@
+import { useEffect } from "react";
+
 export const useCallWebhook = (
   swordIsGlowing: boolean,
-  webhookOnUrl: string | undefined,
-  webhookOffUrl: string | undefined,
+  swordOnWebhookUrl: string | undefined,
+  swordOffWebhookUrl: string | undefined,
 ) => {
   const callWebhook = (webhookUrl: string | undefined) => {
     if (!webhookUrl) {
