@@ -1,39 +1,27 @@
-import { useCallback, useEffect, useState } from "react";
 import styles from "./sting-component.module.css";
 import { StingSword } from "../sting-sword/sting-sword";
 import { EditionChapter, EditionDifferenceData } from "../../movies/movies.ts";
 import dayjsUtc from "../../utils/dayjs-config.ts";
+import { useIsGlowing } from "./useIsGlowing.ts";
+import { useCallWebhook } from "./useCallWebhook.ts";
 
 interface StingComponentProps {
   differences: EditionDifferenceData[];
   chapters: EditionChapter[];
   timestamp: number;
+  swordOnWebhookUrl: string;
+  swordOffWebhookUrl: string;
 }
 
 export const StingComponent = ({
   differences,
   chapters,
   timestamp,
+  swordOnWebhookUrl,
+  swordOffWebhookUrl,
 }: StingComponentProps) => {
-  const [swordIsGlowing, setSwordIsGlowing] = useState<boolean>(false);
-
-  const getDifference = useCallback(
-    (time: number) =>
-      differences.find(
-        (difference) =>
-          difference.start_time_ms < time && difference.end_time_ms > time,
-      ),
-    [differences],
-  );
-
-  useEffect(() => {
-    const maybeDifference = getDifference(timestamp);
-    if (maybeDifference && !swordIsGlowing) {
-      setSwordIsGlowing(true);
-    } else if (!maybeDifference && swordIsGlowing) {
-      setSwordIsGlowing(false);
-    }
-  }, [getDifference, swordIsGlowing, timestamp]);
+  const swordIsGlowing = useIsGlowing(differences, timestamp);
+  useCallWebhook(swordIsGlowing, swordOnWebhookUrl, swordOffWebhookUrl);
 
   const chapter = chapters.findLast((c) => c.start_time_ms <= timestamp);
   const chapterInfo = chapter?.title ?? "Unknown Chapter";

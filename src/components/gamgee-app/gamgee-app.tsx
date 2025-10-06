@@ -8,6 +8,7 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
+  TextField,
 } from "@mui/material";
 import { ManualMetadataProvider } from "../manual-metadata-provider/manual-metadata-provider.tsx";
 import { PlexMetadataProvider } from "../plex-metadata-provider/plex-metadata-provider.tsx";
@@ -26,6 +27,9 @@ export const GamgeeApp = () => {
     useState<MetadataProvider>("Manual");
   const [metadata, setMetadata] = useState<EditionMetadata | null>(null);
   const { mediaTimerProperties, mediaTimerActions } = useMediaTimer(24);
+
+  const [swordOnWebhookUrl, setSwordOnWebhookUrl] = useState<string>("");
+  const [swordOffWebhookUrl, setSwordOffWebhookUrl] = useState<string>("");
 
   const providerLabelId = useId();
   const providerLabel = "Metadata Provider";
@@ -55,25 +59,43 @@ export const GamgeeApp = () => {
               differences={metadata.edition.differences}
               chapters={metadata.edition.chapters}
               timestamp={mediaTimerProperties.timestamp}
+              swordOnWebhookUrl={swordOnWebhookUrl}
+              swordOffWebhookUrl={swordOffWebhookUrl}
             />
           )}
         <Alert severity="info">{capitalize(mediaTimerProperties.state)}</Alert>
-        <FormControl>
-          <InputLabel id={providerLabelId}>{providerLabel}</InputLabel>
-          <Select
-            value={metadataProvider}
-            labelId={providerLabelId}
-            label={providerLabel}
-            onChange={handleMetadataProviderChange}
-          >
-            {metadataProviders.map((provider) => (
-              <MenuItem key={provider} value={provider}>
-                {provider}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <div className={styles.providerContainer}>
+        <div className={styles.stingConfigGroup}>
+          <TextField
+            value={swordOnWebhookUrl}
+            label="Sword On Webhook"
+            onChange={(newUrlEvent) =>
+              setSwordOnWebhookUrl(newUrlEvent.target.value)
+            }
+          />
+          <TextField
+            value={swordOffWebhookUrl}
+            label="Sword Off Webhook"
+            onChange={(newUrlEvent) =>
+              setSwordOffWebhookUrl(newUrlEvent.target.value)
+            }
+          />
+          <FormControl>
+            <InputLabel id={providerLabelId}>{providerLabel}</InputLabel>
+            <Select
+              value={metadataProvider}
+              labelId={providerLabelId}
+              label={providerLabel}
+              onChange={handleMetadataProviderChange}
+            >
+              {metadataProviders.map((provider) => (
+                <MenuItem key={provider} value={provider}>
+                  {provider}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+        <div className={styles.stingConfigGroup}>
           {metadataProvider === "Manual" && (
             <ManualMetadataProvider {...metadataProviderProps} />
           )}
