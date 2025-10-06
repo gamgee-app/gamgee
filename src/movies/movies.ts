@@ -1,5 +1,15 @@
-import differencesTheTwoTowers from "./tt0167261/extended/differences.json" with { type: "json" };
-import chaptersTheTwoTowers from "./tt0167261/extended/chapters.json" with { type: "json" };
+import differencesFellowshipExtended from "./tt0120737/extended/differences.json" with { type: "json" };
+import chaptersFellowshipExtended from "./tt0120737/extended/chapters.json" with { type: "json" };
+import differencesFellowshipTheatrical from "./tt0120737/theatrical/differences.json" with { type: "json" };
+import chaptersFellowshipTheatrical from "./tt0120737/theatrical/chapters.json" with { type: "json" };
+import differencesTheTwoTowersExtended from "./tt0167261/extended/differences.json" with { type: "json" };
+import chaptersTheTwoTowersExtended from "./tt0167261/extended/chapters.json" with { type: "json" };
+import differencesTheTwoTowersTheatrical from "./tt0167261/theatrical/differences.json" with { type: "json" };
+import chaptersTheTwoTowersTheatrical from "./tt0167261/theatrical/chapters.json" with { type: "json" };
+import differencesReturnOfTheKingExtended from "./tt0167260/extended/differences.json" with { type: "json" };
+import chaptersReturnOfTheKingExtended from "./tt0167260/extended/chapters.json" with { type: "json" };
+import differencesReturnOfTheKingTheatrical from "./tt0167260/theatrical/differences.json" with { type: "json" };
+import chaptersReturnOfTheKingTheatrical from "./tt0167260/theatrical/chapters.json" with { type: "json" };
 
 export type EditionDifferenceData = {
   start_time: string;
@@ -18,8 +28,8 @@ export type EditionChapter = {
 export type MovieEdition = {
   label: string;
   duration: number;
-  chapters?: EditionChapter[]; // TODO make required field once we have all the data
-  differences?: EditionDifferenceData[]; // TODO make required field once we have all the data
+  chapters: EditionChapter[];
+  differences: EditionDifferenceData[];
 };
 
 export type Movie = {
@@ -36,10 +46,14 @@ export const movies = [
       {
         label: "Theatrical Edition",
         duration: 10705472,
+        chapters: chaptersFellowshipTheatrical,
+        differences: differencesFellowshipTheatrical,
       },
       {
         label: "Extended Edition",
         duration: 13691758,
+        chapters: chaptersFellowshipExtended,
+        differences: differencesFellowshipExtended,
       },
     ],
   },
@@ -50,12 +64,14 @@ export const movies = [
       {
         label: "Theatrical Edition",
         duration: 10765760,
+        chapters: chaptersTheTwoTowersTheatrical,
+        differences: differencesTheTwoTowersTheatrical,
       },
       {
         label: "Extended Edition",
         duration: 14125166,
-        chapters: chaptersTheTwoTowers,
-        differences: differencesTheTwoTowers,
+        chapters: chaptersTheTwoTowersExtended,
+        differences: differencesTheTwoTowersExtended,
       },
     ],
   },
@@ -66,10 +82,14 @@ export const movies = [
       {
         label: "Theatrical Edition",
         duration: 12061823,
+        chapters: chaptersReturnOfTheKingTheatrical,
+        differences: differencesReturnOfTheKingTheatrical,
       },
       {
         label: "Extended Edition",
         duration: 15790797,
+        chapters: chaptersReturnOfTheKingExtended,
+        differences: differencesReturnOfTheKingExtended,
       },
     ],
   },
