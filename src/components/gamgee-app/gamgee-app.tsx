@@ -64,21 +64,37 @@ export const GamgeeApp = () => {
             />
           )}
         <Alert severity="info">{capitalize(mediaTimerProperties.state)}</Alert>
-        <FormControl>
-          <InputLabel id={providerLabelId}>{providerLabel}</InputLabel>
-          <Select
-            value={metadataProvider}
-            labelId={providerLabelId}
-            label={providerLabel}
-            onChange={handleMetadataProviderChange}
-          >
-            {metadataProviders.map((provider) => (
-              <MenuItem key={provider} value={provider}>
-                {provider}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <div className={styles.providerContainer}>
+          <TextField
+            value={swordOnWebhookUrl}
+            label="Sword On Webhook"
+            onChange={(newUrlEvent) =>
+              setSwordOnWebhookUrl(newUrlEvent.target.value)
+            }
+          />
+          <TextField
+            value={swordOffWebhookUrl}
+            label="Sword Off Webhook"
+            onChange={(newUrlEvent) =>
+              setSwordOffWebhookUrl(newUrlEvent.target.value)
+            }
+          />
+          <FormControl>
+            <InputLabel id={providerLabelId}>{providerLabel}</InputLabel>
+            <Select
+              value={metadataProvider}
+              labelId={providerLabelId}
+              label={providerLabel}
+              onChange={handleMetadataProviderChange}
+            >
+              {metadataProviders.map((provider) => (
+                <MenuItem key={provider} value={provider}>
+                  {provider}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
         <div className={styles.providerContainer}>
           {metadataProvider === "Manual" && (
             <ManualMetadataProvider {...metadataProviderProps} />
@@ -86,22 +102,6 @@ export const GamgeeApp = () => {
           {metadataProvider === "Plex" && (
             <PlexMetadataProvider {...metadataProviderProps} />
           )}
-          <div className={styles.providerContainer}>
-            <TextField
-              value={swordOnWebhookUrl}
-              label="Sword On Webhook"
-              onChange={(newUrlEvent) =>
-                setSwordOnWebhookUrl(newUrlEvent.target.value)
-              }
-            />
-            <TextField
-              value={swordOffWebhookUrl}
-              label="Sword Off Webhook"
-              onChange={(newUrlEvent) =>
-                setSwordOffWebhookUrl(newUrlEvent.target.value)
-              }
-            />
-          </div>
         </div>
       </div>
     </div>
