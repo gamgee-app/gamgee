@@ -28,12 +28,8 @@ export const GamgeeApp = () => {
   const [metadata, setMetadata] = useState<EditionMetadata | null>(null);
   const { mediaTimerProperties, mediaTimerActions } = useMediaTimer(24);
 
-  const [swordOnWebhookUrl, setSwordOnWebhookUrl] = useState<
-    string | undefined
-  >(undefined);
-  const [swordOffWebhookUrl, setSwordOffWebhookUrl] = useState<
-    string | undefined
-  >(undefined);
+  const [swordOnWebhookUrl, setSwordOnWebhookUrl] = useState<string>("");
+  const [swordOffWebhookUrl, setSwordOffWebhookUrl] = useState<string>("");
 
   const providerLabelId = useId();
   const providerLabel = "Metadata Provider";

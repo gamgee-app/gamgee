@@ -9,8 +9,8 @@ interface StingComponentProps {
   differences: EditionDifferenceData[];
   chapters: EditionChapter[];
   timestamp: number;
-  swordOnWebhookUrl: string | undefined;
-  swordOffWebhookUrl: string | undefined;
+  swordOnWebhookUrl: string;
+  swordOffWebhookUrl: string;
 }
 
 export const StingComponent = ({
