@@ -64,7 +64,7 @@ export const GamgeeApp = () => {
             />
           )}
         <Alert severity="info">{capitalize(mediaTimerProperties.state)}</Alert>
-        <div className={styles.providerContainer}>
+        <div className={styles.stingConfigGroup}>
           <TextField
             value={swordOnWebhookUrl}
             label="Sword On Webhook"
@@ -95,7 +95,7 @@ export const GamgeeApp = () => {
             </Select>
           </FormControl>
         </div>
-        <div className={styles.providerContainer}>
+        <div className={styles.stingConfigGroup}>
           {metadataProvider === "Manual" && (
             <ManualMetadataProvider {...metadataProviderProps} />
           )}
