@@ -1,0 +1,15 @@
+server:
+  host: 0.0.0.0
+  port: 8787
+
+webhooks:
+  swordOn: ""
+  swordOff: ""
+  debounceMs: 250
+
+source:
+  kind: manual
+  plex:
+    baseUrl: "http://plex.local:32400"
+    token: "${PLEX_TOKEN}"
+    pollMs: 1000
